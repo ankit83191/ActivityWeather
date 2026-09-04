@@ -12,8 +12,8 @@ struct AppDependencies: Sendable {
         self.getActivityForecast = getActivityForecast
     }
 
-    /// Production composition. Milestone 9 will construct the search ViewModel
-    /// from these use cases; `ContentView` is not given this container.
+    /// Production composition. The app root uses these values to construct
+    /// narrow feature dependencies; this container is never passed to a View.
     static func live(
         client: any APIClient = URLSessionAPIClient(session: .shared)
     ) -> AppDependencies {

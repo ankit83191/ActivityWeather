@@ -206,3 +206,28 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - A second search-length rule in the use case.
 - `static let shared`, service locators, live-network tests.
 - Data-layer or scoring-engine changes.
+
+## Milestone 9
+
+**Accepted after review and tests:**
+
+- `@MainActor @Observable` search state with private mutation and
+  implementation-only properties excluded from Observation.
+- Injected cancellation-aware debounce so tests release waits manually
+  without wall-clock sleeps.
+- Generation plus task-cancellation checks for stale result/error protection.
+- Presentation-level `< 2` policy alongside the repository's defensive guard;
+  the responsibilities are distinct rather than duplicated accidentally.
+- Explicit Domain `Location` selection with a visible and accessible selected
+  row; no speculative callback.
+- Root composition creates the ViewModel from the narrow search use case.
+
+**Rejected / materially changed:**
+
+- Removed the obsolete placeholder `ContentView` when search became the root.
+- Rejected passing `AppDependencies` into any View.
+- Rejected arbitrary sleeps, live networking, and exposed repository errors
+  in ViewModel tests.
+- Rejected navigation callbacks/destinations before the forecast experience.
+- Rejected a redundant Presentation folder and DesignSystem abstraction.
+- No forecast UI, Data, scoring, or UI-test changes.

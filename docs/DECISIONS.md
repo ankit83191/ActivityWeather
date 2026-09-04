@@ -312,3 +312,36 @@ dependency container into views would let any screen reach any service.
 **Consequences:** ViewModels receive use cases (or similarly narrow types)
 through initializers. Domain still does not import Data. Placeholder UI is
 unchanged until search UI exists.
+
+## ADR-020: Debounced location-search presentation
+
+**Context:** Search-as-you-type must avoid unnecessary requests, cancel
+obsolete work, and never let a late response replace a newer query. A
+one-character query intentionally produces no repository request, so showing
+it as a genuine empty result would be misleading.
+
+**Decision:**
+
+- `@MainActor @Observable LocationSearchViewModel` owns explicit idle,
+  loading, results, empty, and generic failure states. Mutation is private
+  outside intent methods.
+- Typing waits 350 ms through an injected cancellation-aware `SearchSleeping`
+  dependency. Submit and retry bypass the delay. Task, sleeper, use case, and
+  request generation are implementation-only Observation state.
+- Empty and trimmed one-character queries remain idle and do not invoke the
+  use case. The ViewModel check is presentation policy (accurate helper copy
+  and less work); the repository retains its separate `< 2` guard as
+  defensive enforcement at the external API boundary.
+- Every new query, submit, or retry cancels prior work. A generation check and
+  task cancellation prevent stale values and errors from changing visible
+  state. Cancellation itself is not a failure.
+- Selection stores only the chosen Domain `Location`. Navigation remains
+  deferred; the selected row visibly and accessibly shows a checkmark.
+- `ActivityWeatherApp` creates `AppDependencies.live()`, constructs the
+  ViewModel from only `SearchLocationsUseCase`, owns it with `@State`, and
+  injects only the ViewModel into `LocationSearchView`. The container never
+  enters presentation. Obsolete `ContentView` is removed.
+
+**Consequences:** Feature files stay flat under `Features/LocationSearch`.
+A presentation subfolder can be introduced if the feature grows enough to
+need one; it adds no value at this scale. Forecast navigation is Milestone 10.

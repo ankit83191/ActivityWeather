@@ -385,3 +385,57 @@ changes, environment injection, live-network tests.
   0 failures; UI target **0** tests
 - Warning: AppIntents metadata extraction skipped (no AppIntents dependency)
 - `ContentView.swift` and `ActivityWeatherApp.swift` unchanged
+
+## 2026-09-04 — Milestone 9: debounced location search experience
+
+Location-search presentation through explicit Domain `Location` selection.
+No forecast screen or navigation destination.
+
+### What shipped
+
+- `@MainActor @Observable LocationSearchViewModel` with idle, loading,
+  results, empty, and generic failure states
+- 350 ms cancellable debounce, immediate submit/retry, request-generation
+  stale-response protection, and explicit selection
+- `LocationSearchView` with semantic Dynamic Type fonts, search-keyboard
+  submit, progress feedback, helper/empty/failure states, accessible result
+  labels, and a visible/VoiceOver-readable selected checkmark
+- App-root composition that injects only `SearchLocationsUseCase` into the
+  ViewModel and only the ViewModel into the View
+- Removal of obsolete `ContentView.swift`
+
+### TDD evidence (actual)
+
+The first project-wired test run found a test compile issue (`await` inside an
+XCTest autoclosure); this was corrected before behavioral evidence and is not
+reported as the Red.
+
+With a compiling minimum ViewModel shape,
+`testSearchStartsOnlyAfterDebounceRelease` failed after the manual sleeper was
+released: repository queries were `[]`, expected `["Paris"]`.
+`xcodebuild test` exited **65**. The minimum debounced delegation then made the
+focused test pass, followed by cancellation, stale-result/error, submit,
+retry, state, ordering, and selection tests while green.
+
+### Decisions and scope
+
+The ViewModel's `< 2` check is UX policy; the repository guard remains
+defensive API-contract enforcement. Errors are intentionally generic in
+presentation. No API errors, DTOs, or dependency container enter the View.
+Feature files remain flat at this size.
+
+### Not in this milestone
+
+Forecast screen, navigation destination, Data/scoring changes, DesignSystem,
+environment injection, UI tests, live-network tests.
+
+### Verification (2026-09-04)
+
+- Simulator destinations rediscovered with `xcodebuild -showdestinations`;
+  selected iPhone 16e, iOS 26.2,
+  `818F8DBA-D98B-4B09-8634-57008C4C2AEB`
+- App `xcodebuild` **BUILD SUCCEEDED** (exit 0), `-derivedDataPath .derivedData`
+- Full `xcodebuild test` **TEST SUCCEEDED** (exit 0): **121** unit tests,
+  0 failures; UI target **0** tests; no skipped tests
+- Warning: AppIntents metadata extraction skipped (no AppIntents dependency)
+- No live-network requests

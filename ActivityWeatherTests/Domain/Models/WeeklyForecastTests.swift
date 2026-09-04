@@ -1,3 +1,4 @@
+import Foundation
 import XCTest
 @testable import ActivityWeather
 
@@ -10,6 +11,65 @@ final class WeeklyForecastTests: XCTestCase {
 
         XCTAssertEqual(forecast.days.count, 7)
         XCTAssertEqual(forecast.timeZoneIdentifier, "Europe/London")
+    }
+
+    func testAcceptsAsiaKolkataIdentifierRecognizedByFoundation() throws {
+        XCTAssertFalse(TimeZone.knownTimeZoneIdentifiers.contains("Asia/Kolkata"))
+        XCTAssertNotNil(TimeZone(identifier: "Asia/Kolkata"))
+
+        let forecast = try WeeklyForecast(
+            timeZoneIdentifier: "Asia/Kolkata",
+            days: try consecutiveDays()
+        )
+
+        XCTAssertEqual(forecast.timeZoneIdentifier, "Asia/Kolkata")
+    }
+
+    func testAcceptsEuropeParisAndPreservesIdentifier() throws {
+        let forecast = try WeeklyForecast(
+            timeZoneIdentifier: "Europe/Paris",
+            days: try consecutiveDays()
+        )
+
+        XCTAssertEqual(forecast.timeZoneIdentifier, "Europe/Paris")
+    }
+
+    func testAcceptsRecognizedCanonicalizingAliasAndPreservesInput() throws {
+        let timeZone = try XCTUnwrap(TimeZone(identifier: "UTC"))
+        XCTAssertEqual(timeZone.identifier, "GMT")
+
+        let forecast = try WeeklyForecast(
+            timeZoneIdentifier: "UTC",
+            days: try consecutiveDays()
+        )
+
+        XCTAssertEqual(forecast.timeZoneIdentifier, "UTC")
+    }
+
+    func testRejectsIdentifierUnrecognizedByFoundation() throws {
+        XCTAssertNil(TimeZone(identifier: "Invalid/Timezone"))
+        XCTAssertThrowsError(
+            try WeeklyForecast(
+                timeZoneIdentifier: "Invalid/Timezone",
+                days: try consecutiveDays()
+            )
+        ) { error in
+            XCTAssertEqual(error as? DomainError, .invalidForecastTimezone)
+        }
+    }
+
+    func testRejectsEmptyAndWhitespaceOnlyTimezoneIdentifiers() throws {
+        for identifier in ["", " ", "\n\t"] {
+            XCTAssertNil(TimeZone(identifier: identifier))
+            XCTAssertThrowsError(
+                try WeeklyForecast(
+                    timeZoneIdentifier: identifier,
+                    days: try consecutiveDays()
+                )
+            ) { error in
+                XCTAssertEqual(error as? DomainError, .invalidForecastTimezone)
+            }
+        }
     }
 
     func testRejectsInvalidTimezoneAndWrongDayCount() throws {

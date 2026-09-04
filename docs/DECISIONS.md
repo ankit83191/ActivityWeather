@@ -132,9 +132,14 @@ window that crosses a daylight-saving transition.
   `Comparable` by those components and models the Forecast API's daily `time`
   value without converting local midnight to a UTC instant.
 - `WeeklyForecast` owns exactly seven unique, strictly chronological,
-  consecutive civil dates and a validated IANA timezone identifier returned by
-  the Forecast API. Domain does not store `utcOffsetSeconds`; the IANA timezone
-  remains the source of truth across daylight-saving changes.
+  consecutive civil dates and a timezone identifier that Foundation can
+  instantiate with `TimeZone(identifier:)`. Membership in
+  `TimeZone.knownTimeZoneIdentifiers` is **not** required: that list omits
+  identifiers such as `Asia/Kolkata` that Open-Meteo returns and Foundation
+  still recognizes. The original Forecast string is stored; Domain does not
+  canonicalize to `TimeZone.identifier`. Domain does not store
+  `utcOffsetSeconds`; the Forecast IANA timezone remains the source of truth
+  across daylight-saving changes.
 - `SuitabilityLevel` is derived only from `SuitabilityScore`, using the bands in
   [SCORING.md](SCORING.md). It cannot be supplied independently.
 - `Activity.allCases` is stable display order only. The product ranks days

@@ -73,6 +73,14 @@ final class ForecastMapperTests: XCTestCase {
         }
     }
 
+    func testMapsIndianTimezoneIdentifierReturnedByForecastAPI() throws {
+        let dto = try decodedSuccessReplacing("Europe/Berlin", with: "Asia/Kolkata")
+        let forecast = try ForecastMapper.weeklyForecast(from: dto)
+
+        XCTAssertEqual(forecast.timeZoneIdentifier, "Asia/Kolkata")
+        XCTAssertEqual(forecast.days.count, 7)
+    }
+
     func testIllegalNumericValuesThrowInvalidForecastValues() throws {
         let dto = try decodedSuccessReplacing("\"snowfall_sum\": [0.0,", with: "\"snowfall_sum\": [-1.0,")
         XCTAssertThrowsError(try ForecastMapper.weeklyForecast(from: dto)) { error in

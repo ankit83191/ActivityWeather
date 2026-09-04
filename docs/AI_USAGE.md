@@ -57,7 +57,9 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
   daily/weekly forecasts, activities, scores, levels, reasons, locations, and
   daily suitability.
 - Focused Red-Green cycles for value invariants rather than one large batch.
-- Foundation `TimeZone.knownTimeZoneIdentifiers` for IANA validation;
+- Foundation `TimeZone.knownTimeZoneIdentifiers` for IANA validation
+  (later corrected: `TimeZone(identifier:)` so identifiers such as
+  `Asia/Kolkata` are accepted; see the timezone identifier fix);
   `CivilDate` itself uses no Foundation date/time conversion.
 - Domain-owned `Sendable` repository protocols and a small `ActivityScoring`
   substitution boundary for later use-case tests.
@@ -265,5 +267,21 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - Rejected four scores in every chronological card; one selected ranking is
   the primary presentation.
 - No Domain, Data, repository, use-case, or scoring changes. A live
-  `Asia/Kolkata` alias rejection was observed in the existing timezone
-  invariant and intentionally left outside this milestone.
+  `Asia/Kolkata` identifier rejection was observed in the existing timezone
+  invariant and left outside this milestone; it was later corrected.
+
+## Timezone identifier correction
+
+**Accepted after tests:**
+
+- Validate Forecast timezones with `TimeZone(identifier:)` rather than
+  `knownTimeZoneIdentifiers.contains`.
+- Store the original Open-Meteo string; do not canonicalize.
+- Reject identifiers Foundation cannot instantiate.
+
+**Rejected:**
+
+- Hardcoding or whitelisting `Asia/Kolkata`.
+- Requiring `TimeZone(identifier:)?.identifier` to equal the input (that
+  would rewrite aliases such as `UTC` → `GMT`).
+- Scoring or forecast UI changes.

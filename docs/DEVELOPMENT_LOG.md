@@ -498,10 +498,10 @@ On iPhone 16e (the smallest available iPhone Simulator), iOS 26.2:
 - The final app process had no serious runtime console errors. Expected
   Simulator-only haptic-library messages were ignored.
 
-The live check also exposed an existing out-of-scope limitation:
-`Asia/Kolkata` is rejected by the current Domain IANA identifier validation.
-The successful required flow used `Europe/Paris`; no Domain or Data behaviour
-was changed.
+The live check also exposed an existing timezone-identifier limitation
+(`Asia/Kolkata` rejected by `knownTimeZoneIdentifiers`). The successful
+required Milestone 10 flow used `Europe/Paris`. That identifier defect was
+corrected afterwards; it is no longer a known limitation.
 
 ### Verification (2026-09-04)
 
@@ -510,4 +510,50 @@ was changed.
   0 failures; UI target **0** tests
 - Focused Milestone 10 suite: **14** tests, 0 failures
 - Warning: AppIntents metadata extraction skipped (no AppIntents dependency)
-- No Domain, Data, repository, use-case, or scoring changes
+- No Domain, Data, repository, use-case, or scoring changes in Milestone 10
+
+## 2026-09-04 — Fix: accept valid IANA timezone identifiers
+
+Open-Meteo returns `Asia/Kolkata` for Indian locations. Domain previously
+required membership in `TimeZone.knownTimeZoneIdentifiers`, which lists
+`Asia/Calcutta` but not `Asia/Kolkata`. Foundation still constructs
+`TimeZone(identifier: "Asia/Kolkata")`. Forecast loads for Pune, Mumbai and
+New Delhi failed as `invalidForecastTimezone`.
+
+### What changed
+
+- `WeeklyForecast` now accepts any identifier Foundation can instantiate
+  through `TimeZone(identifier:)`.
+- The original Forecast string is stored; Domain does not canonicalize.
+- Invalid identifiers such as `Invalid/Timezone` still fail.
+- Scoring rules and forecast UI were not changed.
+
+### TDD evidence (actual)
+
+With the existing `knownTimeZoneIdentifiers` guard,
+`testAcceptsAsiaKolkataIdentifierRecognizedByFoundation` failed:
+`caught error: "invalidForecastTimezone"`. Focused `xcodebuild test` exit **65**.
+
+The `TimeZone(identifier:)` guard then made that test green. Additional
+regressions cover `Europe/Paris`, empty and whitespace-only identifiers,
+`Invalid/Timezone`, `UTC` canonicalizing to `GMT` while preserving the supplied
+string, Forecast mapping of `Asia/Kolkata`, and presentation formatting in
+`Asia/Kolkata`.
+
+### Manual verification
+
+On iPhone 16e, iOS 26.2 (`818F8DBA-D98B-4B09-8634-57008C4C2AEB`): searched
+live Open-Meteo for **Pune**, selected Pune, Maharashtra, India, and loaded
+the forecast successfully (title **Pune**, seven ranked days, local dates such
+as Friday 4 September). Switched successfully through skiing, surfing, outdoor
+and indoor rankings. No failure screen.
+
+### Verification (2026-09-04)
+
+- Simulator: iPhone 16e, iOS 26.2, id `818F8DBA-D98B-4B09-8634-57008C4C2AEB`
+- App `xcodebuild` **BUILD SUCCEEDED** (exit 0), `-derivedDataPath .derivedData`
+- Targeted timezone suite **TEST SUCCEEDED** (exit 0): **12** tests
+- Full `xcodebuild test` **TEST SUCCEEDED** (exit 0): **142** unit tests,
+  0 failures; UI target **0** tests
+- Warning: AppIntents metadata extraction skipped (no AppIntents dependency)
+- Scoring rules and forecast UI were not modified

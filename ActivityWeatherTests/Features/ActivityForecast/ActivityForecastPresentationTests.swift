@@ -98,6 +98,23 @@ final class ActivityForecastPresentationTests: XCTestCase {
         )
     }
 
+    func testDateFormattingUsesAsiaKolkataWithoutShiftingTheCivilDay() throws {
+        XCTAssertEqual(
+            ForecastDateFormatting.string(
+                for: try CivilDate(year: 2026, month: 9, day: 4),
+                timeZoneIdentifier: "Asia/Kolkata",
+                locale: Locale(identifier: "en_US")
+            ),
+            "Friday, September 4"
+        )
+        XCTAssertNil(
+            ForecastDateFormatting.string(
+                for: try CivilDate(year: 2026, month: 9, day: 4),
+                timeZoneIdentifier: "Invalid/Timezone"
+            )
+        )
+    }
+
     func testReasonCopyNeverUsesRawIdentifier() {
         XCTAssertEqual(
             SuitabilityReason.criticalThunderstorm.presentationText,

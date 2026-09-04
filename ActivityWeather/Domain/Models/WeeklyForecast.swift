@@ -5,7 +5,7 @@ struct WeeklyForecast: Equatable, Sendable {
     let days: [DailyForecast]
 
     init(timeZoneIdentifier: String, days: [DailyForecast]) throws {
-        guard TimeZone.knownTimeZoneIdentifiers.contains(timeZoneIdentifier) else {
+        guard TimeZone(identifier: timeZoneIdentifier) != nil else {
             throw DomainError.invalidForecastTimezone
         }
         guard days.count == 7,

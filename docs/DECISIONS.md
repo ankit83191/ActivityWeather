@@ -222,3 +222,38 @@ must pick among ambiguous matches; the app must not invent a location.
 **Consequences:** Search UI (milestone 9) renders `[Location]` and mapping
 failures separately. Forecast still uses Forecast `timezone=auto`, not the
 optional geocoding timezone.
+
+## ADR-017: Seven-day Forecast retrieval and closed mapping
+
+**Context:** `docs/SCORING.md` requires `GET /v1/forecast` with metric units,
+`forecast_days=7`, `timezone=auto`, and thirteen daily variables. Domain
+`WeeklyForecast` accepts only seven consecutive `CivilDate` values and an IANA
+timezone. Open-Meteo may omit keys, emit JSON nulls, or (if misconfigured)
+return imperial units. A live metric response listed `uv_index_max` unit as an
+empty string.
+
+**Decision:**
+
+- `forecast_days=7` means the location’s current local calendar day plus the
+  following six local days. The mapper does **not** compare `daily.time[0]`
+  with the device clock; it only validates seven consecutive civil dates.
+- Request `timezone=auto` and store the returned IANA identifier. Do not
+  persist `utc_offset_seconds` or use it to parse dates. Parse `YYYY-MM-DD`
+  into `CivilDate` without converting through a UTC midnight `Date`.
+- Serialize latitude/longitude with `en_US_POSIX` so the decimal separator is
+  always `.`, without rounding away precision.
+- DTOs use optional containers and optional elements so missing keys and null
+  elements become `DomainError.missingCriticalData`. Wrong JSON types fail
+  `JSONDecoder` (`APIError.decoding` via `APIClient`).
+- Unexpected `daily_units` throw Data-layer
+  `ForecastMappingError.unexpectedUnit`. Metric units are accepted, including
+  an empty or `"Index"` UV unit. Domain errors remain
+  `invalidCivilDate`, `invalidForecastValues`, `invalidForecastTimezone`, and
+  `invalidForecastWindow`.
+- Fewer or extra days are **not** truncated; `WeeklyForecast` rejects them as
+  `invalidForecastWindow`. Array length mismatches fail closed as
+  `missingCriticalData`.
+
+**Consequences:** Scoring (milestone 7) receives only structurally complete
+weeks. Presentation maps `ForecastMappingError` later; it is not user-facing
+copy.

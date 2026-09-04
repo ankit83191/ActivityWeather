@@ -132,3 +132,29 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - Returning `[]` when every returned row is unusable.
 - Lossy coercion of JSON string coordinates into `Double`.
 - Duplicating minimum-query-length policy outside the repository.
+
+## Milestone 6
+
+**Accepted after tests and review:**
+
+- Official `/v1/forecast` with `forecast_days=7`, `timezone=auto`, metric
+  units, and the 13 SCORING.md daily variables (`time` is not in `daily=`).
+- Seven-day window = location-local today plus six following days; no device
+  clock check.
+- Optional DTO containers/elements: missing/null → `missingCriticalData`;
+  wrong JSON type → `APIError.decoding`.
+- Unexpected units → `ForecastMappingError.unexpectedUnit`; empty UV unit
+  accepted.
+- POSIX decimal coordinates; IANA timezone only (no `utc_offset_seconds`).
+- Test-bundle fixtures; actor-backed forecast `APIClient` stub.
+
+**Test process:** Forecast behaviour was implemented with comprehensive automated tests, but the first captured integrated test run was green because tests and production wiring were introduced together. Therefore, this milestone is test-backed rather than a fully evidenced test-first TDD cycle. No failing result was reconstructed or fabricated retrospectively.
+
+**Rejected / not used:**
+
+- Scoring, UI, ViewModels, retries, caching, live-network tests.
+- Silently taking the first seven of extra days or prefix-zipping mismatched
+  arrays.
+- Treating unexpected units as `missingCriticalData`.
+- Locale-sensitive comma decimals.
+- Using geocoding timezone or `utc_offset_seconds` to interpret `daily.time`.

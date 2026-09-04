@@ -12,9 +12,9 @@ The user **explicitly selects** one Open-Meteo Geocoding result. The app never s
 
 ## Forecast window, timezone, and units
 
-- Request **exactly seven** forecast days: `forecast_days=7` on [Open-Meteo Forecast API](https://open-meteo.com/en/docs) (`/v1/forecast`).
-- Timezone is **deterministic**: always pass `timezone=auto`. Persist and validate the `timezone` (and `utc_offset_seconds`) **returned by the Forecast API**. Do not mix this with a geocoding-result timezone at request or interpretation time.
-- Daily `time` values (ISO-8601 dates) are interpreted in the **timezone returned by that Forecast response**.
+- Request **exactly seven** forecast days: `forecast_days=7` on [Open-Meteo Forecast API](https://open-meteo.com/en/docs) (`/v1/forecast`). That window is the selected location’s **current local calendar day plus the following six local days**. The client does not compare the first returned date with the device clock.
+- Timezone is **deterministic**: always pass `timezone=auto`. Persist and validate the IANA `timezone` **returned by the Forecast API**. Do **not** persist or use `utc_offset_seconds` for date calculations, and do not mix geocoding-result timezone into the request or interpretation.
+- Daily `time` values (`YYYY-MM-DD`) are interpreted as civil dates in the **IANA timezone returned by that Forecast response**.
 - Metric units only: `temperature_unit=celsius`, `wind_speed_unit=kmh`, `precipitation_unit=mm`. Open-Meteo reports `snowfall_sum` in **centimetres**.
 
 ## Surfing is a weather proxy

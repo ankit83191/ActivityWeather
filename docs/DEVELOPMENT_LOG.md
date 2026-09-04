@@ -255,3 +255,47 @@ Simulator: iPhone 16e, iOS 26.2, id `818F8DBA-D98B-4B09-8634-57008C4C2AEB`.
   0 failures; UI target **0** tests.
 - Warning: AppIntents metadata extraction skipped (no AppIntents dependency).
 - No live-network requests.
+
+## 2026-09-04 — Milestone 6: seven-day forecast retrieval
+
+Mapping Open-Meteo `/v1/forecast` into Domain `WeeklyForecast`. No scoring or UI.
+
+### What shipped
+
+- `OpenMeteoForecastEndpoint`, `ForecastResponseDTO`, `ForecastMapper`,
+  `ForecastMappingError`, `OpenMeteoForecastRepository`
+- Test-bundle forecast fixtures
+- Actor `ForecastStubAPIClient`
+- ADR-017; ASSUMPTIONS updated for the seven-day window and IANA-only timezone
+
+### Test evidence
+
+Forecast behaviour was implemented with comprehensive automated tests, but the first captured integrated test run was green because tests and production wiring were introduced together. Therefore, this milestone is test-backed rather than a fully evidenced test-first TDD cycle. No failing result was reconstructed or fabricated retrospectively.
+
+The first compiled `xcodebuild test` of the forecast classes **TEST SUCCEEDED** (exit 0): **21** tests, then additional error-boundary and coordinate round-trip assertions were added in review. The overall project still uses pragmatic TDD; Milestone 6 is reported accurately as test-backed.
+
+### Fixtures
+
+Thirteen test-bundle JSON files remain. Each is a different wire-format case (missing keys, null element, wrong JSON type, unexpected unit, length mismatch, invalid date, fewer/extra days, success). JSON is required where Codable behaviour is under test: omitted keys, `null` elements, and a string where an integer is required cannot be expressed by constructing a Swift DTO. The remaining envelopes stay as JSON so mapping is proven against the same decoder path rather than a hand-built DTO that could skip Codable.
+
+### Behaviour recorded in tests
+
+- `daily` query is exactly the 13 documented variables; `time` is omitted;
+  `timezone=auto`.
+- Coordinates use a POSIX decimal point.
+- Missing `daily` / `daily_units` / timezone / `time` / required arrays / null
+  elements / length mismatch → `missingCriticalData`.
+- Wrong JSON types fail decoding; unexpected units → `unexpectedUnit`.
+- Seven consecutive civil dates succeed; fewer/extra days →
+  `invalidForecastWindow`; invalid calendar date → `invalidCivilDate`.
+- Transport, decoding, and cancellation pass through.
+
+### Verification (2026-09-04)
+
+- Simulator: iPhone 16e, iOS 26.2, id `818F8DBA-D98B-4B09-8634-57008C4C2AEB`
+  (discovered via `-showdestinations`).
+- App `xcodebuild` **BUILD SUCCEEDED** (exit 0), `-derivedDataPath .derivedData`.
+- Full `xcodebuild test` **TEST SUCCEEDED** (exit 0): **73** unit tests,
+  0 failures; UI target **0** tests.
+- Warning: AppIntents metadata extraction skipped (no AppIntents dependency).
+- No live-network requests.

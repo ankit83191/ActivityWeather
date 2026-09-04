@@ -57,6 +57,29 @@
 		D21E0C03B2C14F0A9D3E5F10 /* GeocodingLocationMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21E0C03B2C14F0A9D3E5F10 /* GeocodingLocationMapper.swift */; };
 		D21E0C04B2C14F0A9D3E5F10 /* GeocodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21E0C04B2C14F0A9D3E5F10 /* GeocodingError.swift */; };
 		D21E0C05B2C14F0A9D3E5F10 /* OpenMeteoLocationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21E0C05B2C14F0A9D3E5F10 /* OpenMeteoLocationRepository.swift */; };
+		F31F0C01B2C14F0A9D3E5F10 /* OpenMeteoForecastEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F0C01B2C14F0A9D3E5F10 /* OpenMeteoForecastEndpoint.swift */; };
+		F31F0C02B2C14F0A9D3E5F10 /* ForecastResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F0C02B2C14F0A9D3E5F10 /* ForecastResponseDTO.swift */; };
+		F31F0C03B2C14F0A9D3E5F10 /* ForecastMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F0C03B2C14F0A9D3E5F10 /* ForecastMapper.swift */; };
+		F31F0C04B2C14F0A9D3E5F10 /* ForecastMappingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F0C04B2C14F0A9D3E5F10 /* ForecastMappingError.swift */; };
+		F31F0C05B2C14F0A9D3E5F10 /* OpenMeteoForecastRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F0C05B2C14F0A9D3E5F10 /* OpenMeteoForecastRepository.swift */; };
+		F31F0C11B2C14F0A9D3E5F10 /* OpenMeteoForecastEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F0C11B2C14F0A9D3E5F10 /* OpenMeteoForecastEndpointTests.swift */; };
+		F31F0C12B2C14F0A9D3E5F10 /* ForecastMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F0C12B2C14F0A9D3E5F10 /* ForecastMapperTests.swift */; };
+		F31F0C13B2C14F0A9D3E5F10 /* OpenMeteoForecastRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F0C13B2C14F0A9D3E5F10 /* OpenMeteoForecastRepositoryTests.swift */; };
+		F31F0C14B2C14F0A9D3E5F10 /* ForecastStubAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F0C14B2C14F0A9D3E5F10 /* ForecastStubAPIClient.swift */; };
+		F31F0C15B2C14F0A9D3E5F10 /* ForecastFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31F0C15B2C14F0A9D3E5F10 /* ForecastFixture.swift */; };
+		F31F0C20B2C14F0A9D3E5F10 /* forecast_success_seven_days.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C20B2C14F0A9D3E5F10 /* forecast_success_seven_days.json */; };
+		F31F0C21B2C14F0A9D3E5F10 /* forecast_missing_daily.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C21B2C14F0A9D3E5F10 /* forecast_missing_daily.json */; };
+		F31F0C22B2C14F0A9D3E5F10 /* forecast_missing_daily_units.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C22B2C14F0A9D3E5F10 /* forecast_missing_daily_units.json */; };
+		F31F0C23B2C14F0A9D3E5F10 /* forecast_missing_timezone.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C23B2C14F0A9D3E5F10 /* forecast_missing_timezone.json */; };
+		F31F0C24B2C14F0A9D3E5F10 /* forecast_missing_time.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C24B2C14F0A9D3E5F10 /* forecast_missing_time.json */; };
+		F31F0C25B2C14F0A9D3E5F10 /* forecast_missing_weather_code.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C25B2C14F0A9D3E5F10 /* forecast_missing_weather_code.json */; };
+		F31F0C26B2C14F0A9D3E5F10 /* forecast_null_weather_code.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C26B2C14F0A9D3E5F10 /* forecast_null_weather_code.json */; };
+		F31F0C27B2C14F0A9D3E5F10 /* forecast_wrong_types.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C27B2C14F0A9D3E5F10 /* forecast_wrong_types.json */; };
+		F31F0C28B2C14F0A9D3E5F10 /* forecast_unexpected_unit.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C28B2C14F0A9D3E5F10 /* forecast_unexpected_unit.json */; };
+		F31F0C29B2C14F0A9D3E5F10 /* forecast_fewer_days.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C29B2C14F0A9D3E5F10 /* forecast_fewer_days.json */; };
+		F31F0C2AB2C14F0A9D3E5F10 /* forecast_extra_days.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C2AB2C14F0A9D3E5F10 /* forecast_extra_days.json */; };
+		F31F0C2BB2C14F0A9D3E5F10 /* forecast_mismatched_lengths.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C2BB2C14F0A9D3E5F10 /* forecast_mismatched_lengths.json */; };
+		F31F0C2CB2C14F0A9D3E5F10 /* forecast_invalid_date.json in Resources */ = {isa = PBXBuildFile; fileRef = E31F0C2CB2C14F0A9D3E5F10 /* forecast_invalid_date.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,6 +153,29 @@
 		C21E0C03B2C14F0A9D3E5F10 /* GeocodingLocationMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodingLocationMapper.swift; sourceTree = "<group>"; };
 		C21E0C04B2C14F0A9D3E5F10 /* GeocodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodingError.swift; sourceTree = "<group>"; };
 		C21E0C05B2C14F0A9D3E5F10 /* OpenMeteoLocationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoLocationRepository.swift; sourceTree = "<group>"; };
+		E31F0C01B2C14F0A9D3E5F10 /* OpenMeteoForecastEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoForecastEndpoint.swift; sourceTree = "<group>"; };
+		E31F0C02B2C14F0A9D3E5F10 /* ForecastResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastResponseDTO.swift; sourceTree = "<group>"; };
+		E31F0C03B2C14F0A9D3E5F10 /* ForecastMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastMapper.swift; sourceTree = "<group>"; };
+		E31F0C04B2C14F0A9D3E5F10 /* ForecastMappingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastMappingError.swift; sourceTree = "<group>"; };
+		E31F0C05B2C14F0A9D3E5F10 /* OpenMeteoForecastRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoForecastRepository.swift; sourceTree = "<group>"; };
+		E31F0C11B2C14F0A9D3E5F10 /* OpenMeteoForecastEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoForecastEndpointTests.swift; sourceTree = "<group>"; };
+		E31F0C12B2C14F0A9D3E5F10 /* ForecastMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastMapperTests.swift; sourceTree = "<group>"; };
+		E31F0C13B2C14F0A9D3E5F10 /* OpenMeteoForecastRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoForecastRepositoryTests.swift; sourceTree = "<group>"; };
+		E31F0C14B2C14F0A9D3E5F10 /* ForecastStubAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastStubAPIClient.swift; sourceTree = "<group>"; };
+		E31F0C15B2C14F0A9D3E5F10 /* ForecastFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastFixture.swift; sourceTree = "<group>"; };
+		E31F0C20B2C14F0A9D3E5F10 /* forecast_success_seven_days.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_success_seven_days.json; sourceTree = "<group>"; };
+		E31F0C21B2C14F0A9D3E5F10 /* forecast_missing_daily.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_missing_daily.json; sourceTree = "<group>"; };
+		E31F0C22B2C14F0A9D3E5F10 /* forecast_missing_daily_units.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_missing_daily_units.json; sourceTree = "<group>"; };
+		E31F0C23B2C14F0A9D3E5F10 /* forecast_missing_timezone.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_missing_timezone.json; sourceTree = "<group>"; };
+		E31F0C24B2C14F0A9D3E5F10 /* forecast_missing_time.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_missing_time.json; sourceTree = "<group>"; };
+		E31F0C25B2C14F0A9D3E5F10 /* forecast_missing_weather_code.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_missing_weather_code.json; sourceTree = "<group>"; };
+		E31F0C26B2C14F0A9D3E5F10 /* forecast_null_weather_code.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_null_weather_code.json; sourceTree = "<group>"; };
+		E31F0C27B2C14F0A9D3E5F10 /* forecast_wrong_types.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_wrong_types.json; sourceTree = "<group>"; };
+		E31F0C28B2C14F0A9D3E5F10 /* forecast_unexpected_unit.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_unexpected_unit.json; sourceTree = "<group>"; };
+		E31F0C29B2C14F0A9D3E5F10 /* forecast_fewer_days.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_fewer_days.json; sourceTree = "<group>"; };
+		E31F0C2AB2C14F0A9D3E5F10 /* forecast_extra_days.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_extra_days.json; sourceTree = "<group>"; };
+		E31F0C2BB2C14F0A9D3E5F10 /* forecast_mismatched_lengths.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_mismatched_lengths.json; sourceTree = "<group>"; };
+		E31F0C2CB2C14F0A9D3E5F10 /* forecast_invalid_date.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = forecast_invalid_date.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +301,7 @@
 			isa = PBXGroup;
 			children = (
 				C21E0C02B2C14F0A9D3E5F10 /* GeocodingResponseDTO.swift */,
+				E31F0C02B2C14F0A9D3E5F10 /* ForecastResponseDTO.swift */,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
@@ -264,6 +311,8 @@
 			children = (
 				C21E0C04B2C14F0A9D3E5F10 /* GeocodingError.swift */,
 				C21E0C03B2C14F0A9D3E5F10 /* GeocodingLocationMapper.swift */,
+				E31F0C04B2C14F0A9D3E5F10 /* ForecastMappingError.swift */,
+				E31F0C03B2C14F0A9D3E5F10 /* ForecastMapper.swift */,
 			);
 			path = Mappers;
 			sourceTree = "<group>";
@@ -272,6 +321,7 @@
 			isa = PBXGroup;
 			children = (
 				C21E0C05B2C14F0A9D3E5F10 /* OpenMeteoLocationRepository.swift */,
+				E31F0C05B2C14F0A9D3E5F10 /* OpenMeteoForecastRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -284,6 +334,7 @@
 				EC089D92C4F2429CB9C418F9 /* APIClient.swift */,
 				A109FC2826A64AE4A3C591E5 /* URLSessionAPIClient.swift */,
 				C21E0C01B2C14F0A9D3E5F10 /* OpenMeteoGeocodingEndpoint.swift */,
+				E31F0C01B2C14F0A9D3E5F10 /* OpenMeteoForecastEndpoint.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -310,6 +361,7 @@
 			children = (
 				C76BCC5955BB4AC692D69E09 /* Networking */,
 				C11E0C20B2C14F0A9D3E5F10 /* Geocoding */,
+				E31F0C30B2C14F0A9D3E5F10 /* Forecast */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -325,6 +377,39 @@
 				C11E0C21B2C14F0A9D3E5F10 /* Fixtures */,
 			);
 			path = Geocoding;
+			sourceTree = "<group>";
+		};
+		E31F0C30B2C14F0A9D3E5F10 /* Forecast */ = {
+			isa = PBXGroup;
+			children = (
+				E31F0C11B2C14F0A9D3E5F10 /* OpenMeteoForecastEndpointTests.swift */,
+				E31F0C12B2C14F0A9D3E5F10 /* ForecastMapperTests.swift */,
+				E31F0C13B2C14F0A9D3E5F10 /* OpenMeteoForecastRepositoryTests.swift */,
+				E31F0C14B2C14F0A9D3E5F10 /* ForecastStubAPIClient.swift */,
+				E31F0C15B2C14F0A9D3E5F10 /* ForecastFixture.swift */,
+				E31F0C31B2C14F0A9D3E5F10 /* Fixtures */,
+			);
+			path = Forecast;
+			sourceTree = "<group>";
+		};
+		E31F0C31B2C14F0A9D3E5F10 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				E31F0C20B2C14F0A9D3E5F10 /* forecast_success_seven_days.json */,
+				E31F0C21B2C14F0A9D3E5F10 /* forecast_missing_daily.json */,
+				E31F0C22B2C14F0A9D3E5F10 /* forecast_missing_daily_units.json */,
+				E31F0C23B2C14F0A9D3E5F10 /* forecast_missing_timezone.json */,
+				E31F0C24B2C14F0A9D3E5F10 /* forecast_missing_time.json */,
+				E31F0C25B2C14F0A9D3E5F10 /* forecast_missing_weather_code.json */,
+				E31F0C26B2C14F0A9D3E5F10 /* forecast_null_weather_code.json */,
+				E31F0C27B2C14F0A9D3E5F10 /* forecast_wrong_types.json */,
+				E31F0C28B2C14F0A9D3E5F10 /* forecast_unexpected_unit.json */,
+				E31F0C29B2C14F0A9D3E5F10 /* forecast_fewer_days.json */,
+				E31F0C2AB2C14F0A9D3E5F10 /* forecast_extra_days.json */,
+				E31F0C2BB2C14F0A9D3E5F10 /* forecast_mismatched_lengths.json */,
+				E31F0C2CB2C14F0A9D3E5F10 /* forecast_invalid_date.json */,
+			);
+			path = Fixtures;
 			sourceTree = "<group>";
 		};
 		C11E0C21B2C14F0A9D3E5F10 /* Fixtures */ = {
@@ -506,6 +591,19 @@
 				A11E0C16B2C14F0A9D3E5F10 /* geocoding_blank_optional.json in Resources */,
 				A11E0C17B2C14F0A9D3E5F10 /* geocoding_invalid_coordinates.json in Resources */,
 				A11E0C18B2C14F0A9D3E5F10 /* geocoding_wrong_types.json in Resources */,
+				F31F0C20B2C14F0A9D3E5F10 /* forecast_success_seven_days.json in Resources */,
+				F31F0C21B2C14F0A9D3E5F10 /* forecast_missing_daily.json in Resources */,
+				F31F0C22B2C14F0A9D3E5F10 /* forecast_missing_daily_units.json in Resources */,
+				F31F0C23B2C14F0A9D3E5F10 /* forecast_missing_timezone.json in Resources */,
+				F31F0C24B2C14F0A9D3E5F10 /* forecast_missing_time.json in Resources */,
+				F31F0C25B2C14F0A9D3E5F10 /* forecast_missing_weather_code.json in Resources */,
+				F31F0C26B2C14F0A9D3E5F10 /* forecast_null_weather_code.json in Resources */,
+				F31F0C27B2C14F0A9D3E5F10 /* forecast_wrong_types.json in Resources */,
+				F31F0C28B2C14F0A9D3E5F10 /* forecast_unexpected_unit.json in Resources */,
+				F31F0C29B2C14F0A9D3E5F10 /* forecast_fewer_days.json in Resources */,
+				F31F0C2AB2C14F0A9D3E5F10 /* forecast_extra_days.json in Resources */,
+				F31F0C2BB2C14F0A9D3E5F10 /* forecast_mismatched_lengths.json in Resources */,
+				F31F0C2CB2C14F0A9D3E5F10 /* forecast_invalid_date.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,6 +644,11 @@
 				D21E0C03B2C14F0A9D3E5F10 /* GeocodingLocationMapper.swift in Sources */,
 				D21E0C04B2C14F0A9D3E5F10 /* GeocodingError.swift in Sources */,
 				D21E0C05B2C14F0A9D3E5F10 /* OpenMeteoLocationRepository.swift in Sources */,
+				F31F0C01B2C14F0A9D3E5F10 /* OpenMeteoForecastEndpoint.swift in Sources */,
+				F31F0C02B2C14F0A9D3E5F10 /* ForecastResponseDTO.swift in Sources */,
+				F31F0C03B2C14F0A9D3E5F10 /* ForecastMapper.swift in Sources */,
+				F31F0C04B2C14F0A9D3E5F10 /* ForecastMappingError.swift in Sources */,
+				F31F0C05B2C14F0A9D3E5F10 /* OpenMeteoForecastRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +672,11 @@
 				A11E0C03B2C14F0A9D3E5F10 /* OpenMeteoLocationRepositoryTests.swift in Sources */,
 				A11E0C04B2C14F0A9D3E5F10 /* StubAPIClient.swift in Sources */,
 				A11E0C05B2C14F0A9D3E5F10 /* GeocodingFixture.swift in Sources */,
+				F31F0C11B2C14F0A9D3E5F10 /* OpenMeteoForecastEndpointTests.swift in Sources */,
+				F31F0C12B2C14F0A9D3E5F10 /* ForecastMapperTests.swift in Sources */,
+				F31F0C13B2C14F0A9D3E5F10 /* OpenMeteoForecastRepositoryTests.swift in Sources */,
+				F31F0C14B2C14F0A9D3E5F10 /* ForecastStubAPIClient.swift in Sources */,
+				F31F0C15B2C14F0A9D3E5F10 /* ForecastFixture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

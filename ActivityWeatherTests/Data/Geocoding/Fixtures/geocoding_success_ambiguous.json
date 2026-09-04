@@ -1,0 +1,24 @@
+{
+  "results": [
+    {
+      "id": 2950159,
+      "name": "Berlin",
+      "latitude": 52.52437,
+      "longitude": 13.41053,
+      "elevation": 74.0,
+      "timezone": "Europe/Berlin",
+      "country": "Germany",
+      "admin1": "State of Berlin"
+    },
+    {
+      "id": 5083330,
+      "name": "Berlin",
+      "latitude": 44.46867,
+      "longitude": -71.18508,
+      "elevation": 311.0,
+      "timezone": "America/New_York",
+      "country": "United States",
+      "admin1": "New Hampshire"
+    }
+  ]
+}

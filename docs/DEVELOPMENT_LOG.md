@@ -210,3 +210,48 @@ Simulator: iPhone 16e, iOS 26.2, id `818F8DBA-D98B-4B09-8634-57008C4C2AEB`.
   0 failures; UI target **0** tests (unused until milestone 11).
 - Warning: AppIntents metadata extraction skipped (no AppIntents dependency).
 - No live-network requests in tests.
+
+## 2026-09-04 — Milestone 5: Open-Meteo geocoding
+
+Search text → Domain `[Location]` only. No UI, debounce, ViewModels, or Forecast.
+
+### What shipped
+
+- `OpenMeteoGeocodingEndpoint`, internal `GeocodingResponseDTO`,
+  `GeocodingLocationMapper`, `GeocodingError`, `OpenMeteoLocationRepository`
+- Test-bundle JSON fixtures (not in the app target)
+- Actor `StubAPIClient` for repository tests
+- ADR-016
+
+### TDD evidence
+
+Simulator: iPhone 16e, iOS 26.2, id `818F8DBA-D98B-4B09-8634-57008C4C2AEB`.
+
+1. **Endpoint / mapper / repository tests**
+   - Red (exit 65): `cannot find type 'GeocodingResponseDTO' in scope`
+     (`GeocodingFixture.swift`, `StubAPIClient.swift`) after `@testable import`.
+   - Green (exit 0): **19** tests, 0 failures (2 endpoint, 9 mapper, 8
+     repository).
+
+### Behaviour recorded in tests
+
+- Trimmed queries shorter than two characters return `[]` with **no** client
+  invocation.
+- Missing `results` and empty `results` → `[]`.
+- Mixed rows keep valid hits; all-invalid non-empty `results` throws
+  `GeocodingError.noValidLocations`.
+- Blank required text / invalid coordinates skip records; blank optional
+  metadata becomes `nil`.
+- Wrong JSON types fail decoding (not silent skip).
+- Ambiguous matches preserved in API order; transport, decoding, and
+  cancellation pass through.
+
+### Verification (2026-09-04)
+
+- Simulator: iPhone 16e, iOS 26.2, id `818F8DBA-D98B-4B09-8634-57008C4C2AEB`
+  (discovered via `-showdestinations`).
+- App `xcodebuild` **BUILD SUCCEEDED** (exit 0), `-derivedDataPath .derivedData`.
+- Full `xcodebuild test` **TEST SUCCEEDED** (exit 0): **49** unit tests,
+  0 failures; UI target **0** tests.
+- Warning: AppIntents metadata extraction skipped (no AppIntents dependency).
+- No live-network requests.

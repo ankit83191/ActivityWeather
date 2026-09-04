@@ -1,0 +1,16 @@
+{
+  "results": [
+    {
+      "id": 1,
+      "name": "Nowhere",
+      "latitude": 0,
+      "longitude": 0
+    },
+    {
+      "id": 2,
+      "latitude": 10,
+      "longitude": 10,
+      "country": "Germany"
+    }
+  ]
+}

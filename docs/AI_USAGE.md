@@ -108,3 +108,27 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - Asserting query-item order in the serialized query string.
 - Equating wrapped `URLError` values by full `userInfo`; tests check the
   typed `URLError.Code` after URLSession attaches session metadata.
+
+## Milestone 5
+
+**Accepted after tests and review:**
+
+- Official Geocoding `/v1/search` with `count=10`, `language=en`, `format=json`.
+- Repository short-circuit for trimmed queries shorter than two characters,
+  matching the published API matching rules (documented so a later use case
+  does not invent a second rule).
+- Missing/empty `results` vs all-invalid non-empty `results`
+  (`GeocodingError.noValidLocations`).
+- Skip incomplete/blank/invalid-coordinate rows; fail decoding on wrong JSON
+  types.
+- Trim name/country/admin1/timezone; never invent placeholders.
+- Test fixtures in the unit-test bundle only; actor-backed `APIClient` stub.
+
+**Rejected / not used:**
+
+- Forecast client, search UI, ViewModels, debounce, retries, caching,
+  live-network tests.
+- `countryCode` filter (would hide international duplicates).
+- Returning `[]` when every returned row is unusable.
+- Lossy coercion of JSON string coordinates into `Double`.
+- Duplicating minimum-query-length policy outside the repository.

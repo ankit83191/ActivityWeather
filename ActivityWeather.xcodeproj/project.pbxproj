@@ -38,6 +38,25 @@
 		5BDD81BFF66D4A879EBBD1D3 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F671628F6A74F32844465D2 /* APIEndpoint.swift */; };
 		DA16C32E8BA74F05A740551E /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC089D92C4F2429CB9C418F9 /* APIClient.swift */; };
 		3D269D00D588428DA1A54A4A /* URLSessionAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A109FC2826A64AE4A3C591E5 /* URLSessionAPIClient.swift */; };
+		A11E0C01B2C14F0A9D3E5F10 /* OpenMeteoGeocodingEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11E0C01B2C14F0A9D3E5F10 /* OpenMeteoGeocodingEndpointTests.swift */; };
+		A11E0C02B2C14F0A9D3E5F10 /* GeocodingLocationMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11E0C02B2C14F0A9D3E5F10 /* GeocodingLocationMapperTests.swift */; };
+		A11E0C03B2C14F0A9D3E5F10 /* OpenMeteoLocationRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11E0C03B2C14F0A9D3E5F10 /* OpenMeteoLocationRepositoryTests.swift */; };
+		A11E0C04B2C14F0A9D3E5F10 /* StubAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11E0C04B2C14F0A9D3E5F10 /* StubAPIClient.swift */; };
+		A11E0C05B2C14F0A9D3E5F10 /* GeocodingFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11E0C05B2C14F0A9D3E5F10 /* GeocodingFixture.swift */; };
+		A11E0C10B2C14F0A9D3E5F10 /* geocoding_missing_results.json in Resources */ = {isa = PBXBuildFile; fileRef = B11E0C10B2C14F0A9D3E5F10 /* geocoding_missing_results.json */; };
+		A11E0C11B2C14F0A9D3E5F10 /* geocoding_empty_results.json in Resources */ = {isa = PBXBuildFile; fileRef = B11E0C11B2C14F0A9D3E5F10 /* geocoding_empty_results.json */; };
+		A11E0C12B2C14F0A9D3E5F10 /* geocoding_success_ambiguous.json in Resources */ = {isa = PBXBuildFile; fileRef = B11E0C12B2C14F0A9D3E5F10 /* geocoding_success_ambiguous.json */; };
+		A11E0C13B2C14F0A9D3E5F10 /* geocoding_mixed.json in Resources */ = {isa = PBXBuildFile; fileRef = B11E0C13B2C14F0A9D3E5F10 /* geocoding_mixed.json */; };
+		A11E0C14B2C14F0A9D3E5F10 /* geocoding_all_invalid.json in Resources */ = {isa = PBXBuildFile; fileRef = B11E0C14B2C14F0A9D3E5F10 /* geocoding_all_invalid.json */; };
+		A11E0C15B2C14F0A9D3E5F10 /* geocoding_blank_required.json in Resources */ = {isa = PBXBuildFile; fileRef = B11E0C15B2C14F0A9D3E5F10 /* geocoding_blank_required.json */; };
+		A11E0C16B2C14F0A9D3E5F10 /* geocoding_blank_optional.json in Resources */ = {isa = PBXBuildFile; fileRef = B11E0C16B2C14F0A9D3E5F10 /* geocoding_blank_optional.json */; };
+		A11E0C17B2C14F0A9D3E5F10 /* geocoding_invalid_coordinates.json in Resources */ = {isa = PBXBuildFile; fileRef = B11E0C17B2C14F0A9D3E5F10 /* geocoding_invalid_coordinates.json */; };
+		A11E0C18B2C14F0A9D3E5F10 /* geocoding_wrong_types.json in Resources */ = {isa = PBXBuildFile; fileRef = B11E0C18B2C14F0A9D3E5F10 /* geocoding_wrong_types.json */; };
+		D21E0C01B2C14F0A9D3E5F10 /* OpenMeteoGeocodingEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21E0C01B2C14F0A9D3E5F10 /* OpenMeteoGeocodingEndpoint.swift */; };
+		D21E0C02B2C14F0A9D3E5F10 /* GeocodingResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21E0C02B2C14F0A9D3E5F10 /* GeocodingResponseDTO.swift */; };
+		D21E0C03B2C14F0A9D3E5F10 /* GeocodingLocationMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21E0C03B2C14F0A9D3E5F10 /* GeocodingLocationMapper.swift */; };
+		D21E0C04B2C14F0A9D3E5F10 /* GeocodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21E0C04B2C14F0A9D3E5F10 /* GeocodingError.swift */; };
+		D21E0C05B2C14F0A9D3E5F10 /* OpenMeteoLocationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21E0C05B2C14F0A9D3E5F10 /* OpenMeteoLocationRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +111,25 @@
 		4F671628F6A74F32844465D2 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		EC089D92C4F2429CB9C418F9 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		A109FC2826A64AE4A3C591E5 /* URLSessionAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionAPIClient.swift; sourceTree = "<group>"; };
+		B11E0C01B2C14F0A9D3E5F10 /* OpenMeteoGeocodingEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoGeocodingEndpointTests.swift; sourceTree = "<group>"; };
+		B11E0C02B2C14F0A9D3E5F10 /* GeocodingLocationMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodingLocationMapperTests.swift; sourceTree = "<group>"; };
+		B11E0C03B2C14F0A9D3E5F10 /* OpenMeteoLocationRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoLocationRepositoryTests.swift; sourceTree = "<group>"; };
+		B11E0C04B2C14F0A9D3E5F10 /* StubAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubAPIClient.swift; sourceTree = "<group>"; };
+		B11E0C05B2C14F0A9D3E5F10 /* GeocodingFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodingFixture.swift; sourceTree = "<group>"; };
+		B11E0C10B2C14F0A9D3E5F10 /* geocoding_missing_results.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geocoding_missing_results.json; sourceTree = "<group>"; };
+		B11E0C11B2C14F0A9D3E5F10 /* geocoding_empty_results.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geocoding_empty_results.json; sourceTree = "<group>"; };
+		B11E0C12B2C14F0A9D3E5F10 /* geocoding_success_ambiguous.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geocoding_success_ambiguous.json; sourceTree = "<group>"; };
+		B11E0C13B2C14F0A9D3E5F10 /* geocoding_mixed.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geocoding_mixed.json; sourceTree = "<group>"; };
+		B11E0C14B2C14F0A9D3E5F10 /* geocoding_all_invalid.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geocoding_all_invalid.json; sourceTree = "<group>"; };
+		B11E0C15B2C14F0A9D3E5F10 /* geocoding_blank_required.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geocoding_blank_required.json; sourceTree = "<group>"; };
+		B11E0C16B2C14F0A9D3E5F10 /* geocoding_blank_optional.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geocoding_blank_optional.json; sourceTree = "<group>"; };
+		B11E0C17B2C14F0A9D3E5F10 /* geocoding_invalid_coordinates.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geocoding_invalid_coordinates.json; sourceTree = "<group>"; };
+		B11E0C18B2C14F0A9D3E5F10 /* geocoding_wrong_types.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = geocoding_wrong_types.json; sourceTree = "<group>"; };
+		C21E0C01B2C14F0A9D3E5F10 /* OpenMeteoGeocodingEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoGeocodingEndpoint.swift; sourceTree = "<group>"; };
+		C21E0C02B2C14F0A9D3E5F10 /* GeocodingResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodingResponseDTO.swift; sourceTree = "<group>"; };
+		C21E0C03B2C14F0A9D3E5F10 /* GeocodingLocationMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodingLocationMapper.swift; sourceTree = "<group>"; };
+		C21E0C04B2C14F0A9D3E5F10 /* GeocodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodingError.swift; sourceTree = "<group>"; };
+		C21E0C05B2C14F0A9D3E5F10 /* OpenMeteoLocationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMeteoLocationRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,9 +243,37 @@
 		7B282C4EE696479EA234B8E5 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				C21E0C10B2C14F0A9D3E5F10 /* DTOs */,
+				C21E0C11B2C14F0A9D3E5F10 /* Mappers */,
 				FE7B449628BA420197688724 /* Networking */,
+				C21E0C12B2C14F0A9D3E5F10 /* Repositories */,
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		C21E0C10B2C14F0A9D3E5F10 /* DTOs */ = {
+			isa = PBXGroup;
+			children = (
+				C21E0C02B2C14F0A9D3E5F10 /* GeocodingResponseDTO.swift */,
+			);
+			path = DTOs;
+			sourceTree = "<group>";
+		};
+		C21E0C11B2C14F0A9D3E5F10 /* Mappers */ = {
+			isa = PBXGroup;
+			children = (
+				C21E0C04B2C14F0A9D3E5F10 /* GeocodingError.swift */,
+				C21E0C03B2C14F0A9D3E5F10 /* GeocodingLocationMapper.swift */,
+			);
+			path = Mappers;
+			sourceTree = "<group>";
+		};
+		C21E0C12B2C14F0A9D3E5F10 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				C21E0C05B2C14F0A9D3E5F10 /* OpenMeteoLocationRepository.swift */,
+			);
+			path = Repositories;
 			sourceTree = "<group>";
 		};
 		FE7B449628BA420197688724 /* Networking */ = {
@@ -217,6 +283,7 @@
 				4F671628F6A74F32844465D2 /* APIEndpoint.swift */,
 				EC089D92C4F2429CB9C418F9 /* APIClient.swift */,
 				A109FC2826A64AE4A3C591E5 /* URLSessionAPIClient.swift */,
+				C21E0C01B2C14F0A9D3E5F10 /* OpenMeteoGeocodingEndpoint.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -242,8 +309,38 @@
 			isa = PBXGroup;
 			children = (
 				C76BCC5955BB4AC692D69E09 /* Networking */,
+				C11E0C20B2C14F0A9D3E5F10 /* Geocoding */,
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		C11E0C20B2C14F0A9D3E5F10 /* Geocoding */ = {
+			isa = PBXGroup;
+			children = (
+				B11E0C01B2C14F0A9D3E5F10 /* OpenMeteoGeocodingEndpointTests.swift */,
+				B11E0C02B2C14F0A9D3E5F10 /* GeocodingLocationMapperTests.swift */,
+				B11E0C03B2C14F0A9D3E5F10 /* OpenMeteoLocationRepositoryTests.swift */,
+				B11E0C04B2C14F0A9D3E5F10 /* StubAPIClient.swift */,
+				B11E0C05B2C14F0A9D3E5F10 /* GeocodingFixture.swift */,
+				C11E0C21B2C14F0A9D3E5F10 /* Fixtures */,
+			);
+			path = Geocoding;
+			sourceTree = "<group>";
+		};
+		C11E0C21B2C14F0A9D3E5F10 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				B11E0C10B2C14F0A9D3E5F10 /* geocoding_missing_results.json */,
+				B11E0C11B2C14F0A9D3E5F10 /* geocoding_empty_results.json */,
+				B11E0C12B2C14F0A9D3E5F10 /* geocoding_success_ambiguous.json */,
+				B11E0C13B2C14F0A9D3E5F10 /* geocoding_mixed.json */,
+				B11E0C14B2C14F0A9D3E5F10 /* geocoding_all_invalid.json */,
+				B11E0C15B2C14F0A9D3E5F10 /* geocoding_blank_required.json */,
+				B11E0C16B2C14F0A9D3E5F10 /* geocoding_blank_optional.json */,
+				B11E0C17B2C14F0A9D3E5F10 /* geocoding_invalid_coordinates.json */,
+				B11E0C18B2C14F0A9D3E5F10 /* geocoding_wrong_types.json */,
+			);
+			path = Fixtures;
 			sourceTree = "<group>";
 		};
 		C76BCC5955BB4AC692D69E09 /* Networking */ = {
@@ -400,6 +497,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A11E0C10B2C14F0A9D3E5F10 /* geocoding_missing_results.json in Resources */,
+				A11E0C11B2C14F0A9D3E5F10 /* geocoding_empty_results.json in Resources */,
+				A11E0C12B2C14F0A9D3E5F10 /* geocoding_success_ambiguous.json in Resources */,
+				A11E0C13B2C14F0A9D3E5F10 /* geocoding_mixed.json in Resources */,
+				A11E0C14B2C14F0A9D3E5F10 /* geocoding_all_invalid.json in Resources */,
+				A11E0C15B2C14F0A9D3E5F10 /* geocoding_blank_required.json in Resources */,
+				A11E0C16B2C14F0A9D3E5F10 /* geocoding_blank_optional.json in Resources */,
+				A11E0C17B2C14F0A9D3E5F10 /* geocoding_invalid_coordinates.json in Resources */,
+				A11E0C18B2C14F0A9D3E5F10 /* geocoding_wrong_types.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,6 +541,11 @@
 				5BDD81BFF66D4A879EBBD1D3 /* APIEndpoint.swift in Sources */,
 				DA16C32E8BA74F05A740551E /* APIClient.swift in Sources */,
 				3D269D00D588428DA1A54A4A /* URLSessionAPIClient.swift in Sources */,
+				D21E0C01B2C14F0A9D3E5F10 /* OpenMeteoGeocodingEndpoint.swift in Sources */,
+				D21E0C02B2C14F0A9D3E5F10 /* GeocodingResponseDTO.swift in Sources */,
+				D21E0C03B2C14F0A9D3E5F10 /* GeocodingLocationMapper.swift in Sources */,
+				D21E0C04B2C14F0A9D3E5F10 /* GeocodingError.swift in Sources */,
+				D21E0C05B2C14F0A9D3E5F10 /* OpenMeteoLocationRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,6 +564,11 @@
 				5BF9BEB6C44A427C8C99BBB3 /* APIEndpointTests.swift in Sources */,
 				D3616CA25BF9466783B5C111 /* StubURLProtocol.swift in Sources */,
 				C37A074CA8704B55863FDF18 /* URLSessionAPIClientTests.swift in Sources */,
+				A11E0C01B2C14F0A9D3E5F10 /* OpenMeteoGeocodingEndpointTests.swift in Sources */,
+				A11E0C02B2C14F0A9D3E5F10 /* GeocodingLocationMapperTests.swift in Sources */,
+				A11E0C03B2C14F0A9D3E5F10 /* OpenMeteoLocationRepositoryTests.swift in Sources */,
+				A11E0C04B2C14F0A9D3E5F10 /* StubAPIClient.swift in Sources */,
+				A11E0C05B2C14F0A9D3E5F10 /* GeocodingFixture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

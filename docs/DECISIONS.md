@@ -186,3 +186,39 @@ this client. Retries, caching, reachability, logging frameworks,
 authentication, and generic POST/upload are out of scope until a later
 requirement exists. `URLSessionAPIClient` is `@unchecked Sendable` because
 `URLSession` is thread-safe for data tasks but is not `Sendable` in the SDK.
+
+## ADR-016: Open-Meteo geocoding mapping and query short-circuit
+
+**Context:** The official Geocoding API (`https://geocoding-api.open-meteo.com/v1/search`)
+requires `name`, defaults `count` to 10, `language` to `en`, and `format` to
+`json`. Empty and single-character searches return no `results`. Two characters
+are an exact name match. Absent optional fields are omitted from JSON. The user
+must pick among ambiguous matches; the app must not invent a location.
+
+**Decision:**
+
+- `OpenMeteoLocationRepository` trims the query and returns `[]` without a
+  network call when the trimmed length is fewer than two characters. That
+  matches the API matching rules. A later search use case must not add a
+  conflicting minimum-length rule.
+- Requests send `name` (trimmed), `count=10`, `language=en`, `format=json`.
+  `countryCode` is omitted so international duplicates remain visible.
+- Missing `results` or `results: []` map to `[]`. Mixed payloads keep every
+  record that can become a Domain `Location` and skip the rest. A non-empty
+  `results` array where **every** row is unusable throws
+  `GeocodingError.noValidLocations` so the UI cannot treat a corrupt payload as
+  “no matches.”
+- Records are skipped when required `id`, `name`, `latitude`, `longitude`, or
+  `country` are missing, blank after trim, or fail Domain `Coordinate`
+  validation. Optional `admin1` and `timezone` become `nil` when blank.
+  Placeholder country/region strings are not invented. `Location.id` is the
+  official geocoding id.
+- Wrong JSON types or an incompatible envelope fail `JSONDecoder` and surface
+  as `APIError.decoding`. Result DTO numeric/string fields are not coerced
+  from the wrong JSON type.
+- DTOs and the mapper stay in Data. Cancellation and `APIError` values from
+  `APIClient` pass through unchanged.
+
+**Consequences:** Search UI (milestone 9) renders `[Location]` and mapping
+failures separately. Forecast still uses Forecast `timezone=auto`, not the
+optional geocoding timezone.

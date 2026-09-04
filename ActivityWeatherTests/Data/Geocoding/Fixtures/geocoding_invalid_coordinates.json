@@ -1,0 +1,11 @@
+{
+  "results": [
+    {
+      "id": 99,
+      "name": "Invalid",
+      "latitude": 91,
+      "longitude": 0,
+      "country": "Nowhere"
+    }
+  ]
+}

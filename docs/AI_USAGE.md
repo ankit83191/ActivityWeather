@@ -184,3 +184,25 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - Rejected applying the outdoor veto to indoor scoring.
 - Rejected emitting `dangerousTravelCap` when raw was already `≤ 40`.
 - No UI, DTO, networking, or repository edits in this milestone.
+
+## Milestone 8
+
+**Accepted after review and tests:**
+
+- Use cases orchestrate Domain workflows; JSON mapping stays in Data.
+- Search trims and always delegates; repository keeps the `< 2` short-circuit.
+- Forecast fetched once; 28 scoring calls (7×4); four `ActivityDayRanking`
+  values in `Activity.allCases` order.
+- `AppDependencies.live(client:)` as an explicit factory, not a shared
+  singleton or environment object.
+- Composition proven by driving `searchLocations` through the real geocoding
+  repository with `StubAPIClient` (fixture, no live network).
+- Deferred wiring: `ContentView` does not receive `AppDependencies`.
+
+**Rejected / not used:**
+
+- Injecting the whole container into `ContentView`.
+- Use-case protocols, debounce, ViewModels, feature UI.
+- A second search-length rule in the use case.
+- `static let shared`, service locators, live-network tests.
+- Data-layer or scoring-engine changes.

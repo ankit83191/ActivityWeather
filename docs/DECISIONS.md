@@ -285,3 +285,30 @@ so production rounding must not use `try!`. Polar night allows
 
 **Consequences:** Test doubles implement one method. Ranking behaviour has one
 canonical implementation. Weights stay in `docs/SCORING.md`.
+
+## ADR-019: Use cases and a live composition factory
+
+**Context:** Presentation must run search and forecast-then-score workflows
+without knowing Open-Meteo, DTOs, or `URLSession`. Injecting a whole
+dependency container into views would let any screen reach any service.
+
+**Decision:**
+
+- `SearchLocationsUseCase` trims whitespace/newlines and delegates once to
+  `LocationRepository`. It does not apply a second minimum-length
+  short-circuit (ADR-016 stays in `OpenMeteoLocationRepository`).
+- `GetActivityForecastUseCase` fetches `WeeklyForecast` once, then ranks all
+  four `Activity.allCases` in display order via `ActivityScoring`. The Domain
+  result is `LocationActivityForecast` / `ActivityDayRanking` (scores and raw
+  weather, no UI formatting).
+- `AppDependencies.live(client:)` is the single composition factory: one
+  shared `APIClient`, both Open-Meteo repositories, `SuitabilityScoringEngine`,
+  both use cases. No `static let shared`, environment objects, or service
+  lookup.
+- Milestone 8 does **not** wire `AppDependencies` into `ContentView` or
+  `ActivityWeatherApp`. Milestone 9 will construct the search ViewModel from
+  `AppDependencies` and inject only that narrow dependency.
+
+**Consequences:** ViewModels receive use cases (or similarly narrow types)
+through initializers. Domain still does not import Data. Placeholder UI is
+unchanged until search UI exists.

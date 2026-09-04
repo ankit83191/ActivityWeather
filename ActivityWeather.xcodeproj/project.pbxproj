@@ -33,6 +33,14 @@
 		6397BE661C69435286935348 /* ActivityScoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B3712991BF4C0988B085E4 /* ActivityScoring.swift */; };
 		G41F0C01B2C14F0A9D3E5F10 /* SuitabilityScoringEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = H41F0C01B2C14F0A9D3E5F10 /* SuitabilityScoringEngine.swift */; };
 		G41F0C02B2C14F0A9D3E5F10 /* ScoringSpecification.swift in Sources */ = {isa = PBXBuildFile; fileRef = H41F0C02B2C14F0A9D3E5F10 /* ScoringSpecification.swift */; };
+		G81E0C01B2C14F0A9D3E5F10 /* LocationActivityForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = H81E0C01B2C14F0A9D3E5F10 /* LocationActivityForecast.swift */; };
+		G81E0C02B2C14F0A9D3E5F10 /* SearchLocationsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = H81E0C02B2C14F0A9D3E5F10 /* SearchLocationsUseCase.swift */; };
+		G81E0C03B2C14F0A9D3E5F10 /* GetActivityForecastUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = H81E0C03B2C14F0A9D3E5F10 /* GetActivityForecastUseCase.swift */; };
+		G81E0C04B2C14F0A9D3E5F10 /* AppDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = H81E0C04B2C14F0A9D3E5F10 /* AppDependencies.swift */; };
+		G81E0C11B2C14F0A9D3E5F10 /* SearchLocationsUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = H81E0C11B2C14F0A9D3E5F10 /* SearchLocationsUseCaseTests.swift */; };
+		G81E0C12B2C14F0A9D3E5F10 /* GetActivityForecastUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = H81E0C12B2C14F0A9D3E5F10 /* GetActivityForecastUseCaseTests.swift */; };
+		G81E0C13B2C14F0A9D3E5F10 /* AppDependenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = H81E0C13B2C14F0A9D3E5F10 /* AppDependenciesTests.swift */; };
+		G81E0C14B2C14F0A9D3E5F10 /* UseCaseSpies.swift in Sources */ = {isa = PBXBuildFile; fileRef = H81E0C14B2C14F0A9D3E5F10 /* UseCaseSpies.swift */; };
 		G41F0C11B2C14F0A9D3E5F10 /* SuitabilityScoringEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = H41F0C11B2C14F0A9D3E5F10 /* SuitabilityScoringEngineTests.swift */; };
 		G41F0C12B2C14F0A9D3E5F10 /* ScoringFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = H41F0C12B2C14F0A9D3E5F10 /* ScoringFixture.swift */; };
 		G41F0C13B2C14F0A9D3E5F10 /* ScoringThresholdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = H41F0C13B2C14F0A9D3E5F10 /* ScoringThresholdTests.swift */; };
@@ -135,6 +143,14 @@
 		A9B3712991BF4C0988B085E4 /* ActivityScoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityScoring.swift; sourceTree = "<group>"; };
 		H41F0C01B2C14F0A9D3E5F10 /* SuitabilityScoringEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuitabilityScoringEngine.swift; sourceTree = "<group>"; };
 		H41F0C02B2C14F0A9D3E5F10 /* ScoringSpecification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringSpecification.swift; sourceTree = "<group>"; };
+		H81E0C01B2C14F0A9D3E5F10 /* LocationActivityForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationActivityForecast.swift; sourceTree = "<group>"; };
+		H81E0C02B2C14F0A9D3E5F10 /* SearchLocationsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationsUseCase.swift; sourceTree = "<group>"; };
+		H81E0C03B2C14F0A9D3E5F10 /* GetActivityForecastUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetActivityForecastUseCase.swift; sourceTree = "<group>"; };
+		H81E0C04B2C14F0A9D3E5F10 /* AppDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependencies.swift; sourceTree = "<group>"; };
+		H81E0C11B2C14F0A9D3E5F10 /* SearchLocationsUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationsUseCaseTests.swift; sourceTree = "<group>"; };
+		H81E0C12B2C14F0A9D3E5F10 /* GetActivityForecastUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetActivityForecastUseCaseTests.swift; sourceTree = "<group>"; };
+		H81E0C13B2C14F0A9D3E5F10 /* AppDependenciesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependenciesTests.swift; sourceTree = "<group>"; };
+		H81E0C14B2C14F0A9D3E5F10 /* UseCaseSpies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCaseSpies.swift; sourceTree = "<group>"; };
 		H41F0C11B2C14F0A9D3E5F10 /* SuitabilityScoringEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuitabilityScoringEngineTests.swift; sourceTree = "<group>"; };
 		H41F0C12B2C14F0A9D3E5F10 /* ScoringFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringFixture.swift; sourceTree = "<group>"; };
 		H41F0C13B2C14F0A9D3E5F10 /* ScoringThresholdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringThresholdTests.swift; sourceTree = "<group>"; };
@@ -251,6 +267,7 @@
 			children = (
 				F6ADDA95C55A4003BF7B139A /* ActivityWeatherApp.swift */,
 				FE3B460E78894E4690CC2387 /* ContentView.swift */,
+				H81E0C04B2C14F0A9D3E5F10 /* AppDependencies.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -261,6 +278,7 @@
 				BEDBE93AF287431AAA73380C /* DomainError.swift */,
 				192C9654A68441ECBBFF9C8B /* Models */,
 				7330FAD6C35A4BD9B60CAAF3 /* Repositories */,
+				H81E0C20B2C14F0A9D3E5F10 /* UseCases */,
 				00ADD4561C2D42E58F05BD4D /* Scoring */,
 			);
 			path = Domain;
@@ -277,6 +295,7 @@
 				D742258DC9A24D299FADAC8A /* Activity.swift */,
 				B736B69F15E040FDB81FE00C /* Location.swift */,
 				536C93F823A64F0AA6D35A96 /* DailyActivitySuitability.swift */,
+				H81E0C01B2C14F0A9D3E5F10 /* LocationActivityForecast.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -288,6 +307,15 @@
 				39C4C2DC01BF4AFA84699EBB /* ForecastRepository.swift */,
 			);
 			path = Repositories;
+			sourceTree = "<group>";
+		};
+		H81E0C20B2C14F0A9D3E5F10 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				H81E0C02B2C14F0A9D3E5F10 /* SearchLocationsUseCase.swift */,
+				H81E0C03B2C14F0A9D3E5F10 /* GetActivityForecastUseCase.swift */,
+			);
+			path = UseCases;
 			sourceTree = "<group>";
 		};
 		00ADD4561C2D42E58F05BD4D /* Scoring */ = {
@@ -364,10 +392,19 @@
 		602369F36B48487CA1D0DEAB /* ActivityWeatherTests */ = {
 			isa = PBXGroup;
 			children = (
+				H81E0C22B2C14F0A9D3E5F10 /* App */,
 				A058A004E77045E98992A2F7 /* Domain */,
 				145300566A174CFFB208B4BE /* Data */,
 			);
 			path = ActivityWeatherTests;
+			sourceTree = "<group>";
+		};
+		H81E0C22B2C14F0A9D3E5F10 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				H81E0C13B2C14F0A9D3E5F10 /* AppDependenciesTests.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 		145300566A174CFFB208B4BE /* Data */ = {
@@ -456,6 +493,7 @@
 			isa = PBXGroup;
 			children = (
 				29A4A66C738C437E83643BAE /* Models */,
+				H81E0C21B2C14F0A9D3E5F10 /* UseCases */,
 				H41F0C20B2C14F0A9D3E5F10 /* Scoring */,
 			);
 			path = Domain;
@@ -485,6 +523,16 @@
 				H41F0C14B2C14F0A9D3E5F10 /* ActivityScoringRankingTests.swift */,
 			);
 			path = Scoring;
+			sourceTree = "<group>";
+		};
+		H81E0C21B2C14F0A9D3E5F10 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				H81E0C14B2C14F0A9D3E5F10 /* UseCaseSpies.swift */,
+				H81E0C11B2C14F0A9D3E5F10 /* SearchLocationsUseCaseTests.swift */,
+				H81E0C12B2C14F0A9D3E5F10 /* GetActivityForecastUseCaseTests.swift */,
+			);
+			path = UseCases;
 			sourceTree = "<group>";
 		};
 		21F333DAA2B340E68CEEB8CF /* ActivityWeatherUITests */ = {
@@ -649,6 +697,7 @@
 			files = (
 				037B42584F364C6E86C33FA7 /* ActivityWeatherApp.swift in Sources */,
 				3158DD9562A04454BB1A1647 /* ContentView.swift in Sources */,
+				G81E0C04B2C14F0A9D3E5F10 /* AppDependencies.swift in Sources */,
 				992F2C83CF2E4C8F9322F10D /* DomainError.swift in Sources */,
 				50DA6FB18A1F4A08994628C3 /* Coordinate.swift in Sources */,
 				610FCAB89A1740ADA88FDF01 /* SuitabilityScore.swift in Sources */,
@@ -658,11 +707,14 @@
 				C1AD8614E2424C8E9EC957D2 /* Activity.swift in Sources */,
 				8D23D5652F164481A8020B77 /* Location.swift in Sources */,
 				1A0DC801B943402C956CB8E0 /* DailyActivitySuitability.swift in Sources */,
+				G81E0C01B2C14F0A9D3E5F10 /* LocationActivityForecast.swift in Sources */,
 				A51BC048D6BA4A8697DE87FE /* LocationRepository.swift in Sources */,
 				FF57BD8E362E4DACAF1FF89D /* ForecastRepository.swift in Sources */,
 				6397BE661C69435286935348 /* ActivityScoring.swift in Sources */,
 				G41F0C01B2C14F0A9D3E5F10 /* SuitabilityScoringEngine.swift in Sources */,
 				G41F0C02B2C14F0A9D3E5F10 /* ScoringSpecification.swift in Sources */,
+				G81E0C02B2C14F0A9D3E5F10 /* SearchLocationsUseCase.swift in Sources */,
+				G81E0C03B2C14F0A9D3E5F10 /* GetActivityForecastUseCase.swift in Sources */,
 				A635CFFD5E5D4ED2B53E98A8 /* APIError.swift in Sources */,
 				5BDD81BFF66D4A879EBBD1D3 /* APIEndpoint.swift in Sources */,
 				DA16C32E8BA74F05A740551E /* APIClient.swift in Sources */,
@@ -691,6 +743,10 @@
 				G41F0C11B2C14F0A9D3E5F10 /* SuitabilityScoringEngineTests.swift in Sources */,
 				G41F0C13B2C14F0A9D3E5F10 /* ScoringThresholdTests.swift in Sources */,
 				G41F0C14B2C14F0A9D3E5F10 /* ActivityScoringRankingTests.swift in Sources */,
+				G81E0C14B2C14F0A9D3E5F10 /* UseCaseSpies.swift in Sources */,
+				G81E0C11B2C14F0A9D3E5F10 /* SearchLocationsUseCaseTests.swift in Sources */,
+				G81E0C12B2C14F0A9D3E5F10 /* GetActivityForecastUseCaseTests.swift in Sources */,
+				G81E0C13B2C14F0A9D3E5F10 /* AppDependenciesTests.swift in Sources */,
 				092AC8C1076443AE9B2AA52A /* SuitabilityLevelTests.swift in Sources */,
 				0EB3BEBE98DA4EE081CA49F7 /* DailyForecastTests.swift in Sources */,
 				89F8B02231FD4AD8AFB30779 /* WeeklyForecastTests.swift in Sources */,

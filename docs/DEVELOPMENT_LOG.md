@@ -340,3 +340,48 @@ UI, ViewModels, networking, DTOs, repositories, composition root.
 - Full `xcodebuild test` **TEST SUCCEEDED** (exit 0): **98** unit tests,
   0 failures; UI target **0** tests
 - Warning: AppIntents metadata extraction skipped (no AppIntents dependency)
+
+## 2026-09-04 — Milestone 8: use cases and composition root
+
+Thin Domain orchestration plus `AppDependencies.live`. No feature UI or
+ViewModels. `ContentView` and `ActivityWeatherApp` are unchanged.
+
+### What shipped
+
+- `SearchLocationsUseCase`, `GetActivityForecastUseCase`
+- `LocationActivityForecast` / `ActivityDayRanking`
+- `AppDependencies.live(client:)`
+- Spy tests and a composed search path through `OpenMeteoLocationRepository`
+
+### TDD evidence (actual)
+
+1. Compiling `SearchLocationsUseCase` stub that returned `[]` without calling
+   the repository.
+2. **Assertion-red:** `testTrimsQueryAndDelegatesToTheRepositoryOnce` —
+   `XCTAssertEqual failed: ("[]") is not equal to ("["Paris"]")` (and locations
+   `[]` vs the expected Paris result). Simulator iPhone 16e, exit **65**.
+3. Search use case implemented (trim + one repository call).
+4. Compiling `GetActivityForecastUseCase` stub that threw
+   `missingCriticalData`.
+5. **Red:** `testFetchesOnceAndScoresEveryDayForEveryActivity` failed: caught
+   error `"missingCriticalData"` (exit **65**). Then the real fetch-once /
+   score-28-times implementation.
+
+### Deferred wiring
+
+`AppDependencies` is created and tested. Root-view injection waits for
+Milestone 9 so `ContentView` does not receive the whole container.
+
+### Not in this milestone
+
+Search/forecast UI, ViewModels, debounce, use-case protocols, Data or scoring
+changes, environment injection, live-network tests.
+
+### Verification (2026-09-04)
+
+- Simulator: iPhone 16e, iOS 26.2, id `818F8DBA-D98B-4B09-8634-57008C4C2AEB`
+- App `xcodebuild` **BUILD SUCCEEDED** (exit 0), `-derivedDataPath .derivedData`
+- Full `xcodebuild test` **TEST SUCCEEDED** (exit 0): **106** unit tests,
+  0 failures; UI target **0** tests
+- Warning: AppIntents metadata extraction skipped (no AppIntents dependency)
+- `ContentView.swift` and `ActivityWeatherApp.swift` unchanged

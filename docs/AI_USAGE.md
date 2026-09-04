@@ -48,3 +48,31 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - Treating heavy snowfall as automatically equivalent to ideal skiing weather.
 - Indoor score as `100 - outdoorScore`.
 - Live Open-Meteo calls or Swift scoring types in this documentation-only milestone.
+
+## Milestone 3
+
+**Accepted after tests and review:**
+
+- Validated, `Sendable` Domain values for coordinates, civil dates, complete
+  daily/weekly forecasts, activities, scores, levels, reasons, locations, and
+  daily suitability.
+- Focused Red-Green cycles for value invariants rather than one large batch.
+- Foundation `TimeZone.knownTimeZoneIdentifiers` for IANA validation;
+  `CivilDate` itself uses no Foundation date/time conversion.
+- Domain-owned `Sendable` repository protocols and a small `ActivityScoring`
+  substitution boundary for later use-case tests.
+
+**Rejected / materially corrected:**
+
+- Rejected ranking the four activities within one day. The product ranks seven
+  days separately per activity.
+- Rejected independently initialized score and level; level is derived from the
+  bounded score.
+- Rejected optional weather fields in `DailyForecast` and rejected mapping
+  missing data to score 0.
+- Rejected one fixed `utcOffsetSeconds` in Domain because the forecast can cross
+  a daylight-saving transition.
+- Rejected Foundation `Date` for a location-local forecast day; a validated
+  Gregorian `CivilDate` avoids UTC-midnight ambiguity.
+- No generated scoring implementation, DTOs, networking, UI, or speculative
+  `ActivityRanking` type.

@@ -56,6 +56,18 @@ score = clamp(Int(raw'.rounded(.toNearestOrAwayFromZero)), 0, 100)
 
 `clamp` is inclusive `0...100`. Rounding is half away from zero (Swift `FloatingPointRoundingRule.toNearestOrAwayFromZero`).
 
+### Suitability levels
+
+The user-facing level is derived from the bounded integer score; callers never
+supply it independently.
+
+| Score | Level |
+|---|---|
+| `0...24` | Poor |
+| `25...49` | Fair |
+| `50...74` | Good |
+| `75...100` | Great |
+
 ## Ranking
 
 Among **scored** days for one activity:
@@ -63,12 +75,11 @@ Among **scored** days for one activity:
 1. `score` descending
 2. calendar `time` ascending (earlier date wins a tie)
 
-Among **scored** activities on one day:
-
-1. `score` descending
-2. stable activity order: `skiing`, `surfing`, `outdoorSightseeing`, `indoorSightseeing`
-
 Unavailable results are omitted from ranking (they are errors, not last-place scores).
+
+The product does **not** rank activities against one another. `Activity.allCases`
+defines display order only: skiing, surfing, outdoor sightseeing, then indoor
+sightseeing.
 
 ## WMO handling
 

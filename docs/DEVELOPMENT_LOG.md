@@ -70,3 +70,62 @@ Not applicable. Documentation-only; no behavioural production code.
 ### Not in this milestone
 
 Domain types, networking, scoring implementation, search/forecast UI.
+
+## 2026-09-04 — Milestone 3: domain models and contracts
+
+### Specification correction before implementation
+
+`docs/SCORING.md` now states the approved suitability level bands
+(`0...24` Poor, `25...49` Fair, `50...74` Good, `75...100` Great) and
+corrects ranking language: seven days are ranked independently for each
+activity. Activities are never sorted against one another;
+`Activity.allCases` is display order only.
+
+### TDD evidence
+
+Focused Red → Green cycles were run against the discovered iPhone 17 simulator:
+
+1. **Coordinate**
+   - Red (exit 65): test target did not compile — `cannot find 'Coordinate' in scope`.
+   - Green (exit 0): 2 tests, 0 failures.
+2. **SuitabilityScore**
+   - Red (exit 65): `cannot find 'SuitabilityScore' in scope`.
+   - First green attempt compiled but the simulator rejected app launch as
+     `Busy` (exit 65); no assertion or compiler failure.
+   - Retry green (exit 0): 2 tests, 0 failures.
+3. **CivilDate**
+   - Red (exit 65): `cannot find 'CivilDate' in scope`.
+   - Green (exit 0): 3 tests, 0 failures.
+4. **WeeklyForecast**
+   - Red (exit 65): `cannot find 'WeeklyForecast' in scope`.
+   - Green (exit 0): 5 tests, 0 failures.
+5. **Remaining Domain values**
+   - Red (exit 65): `Activity`, `Location`, and
+     `DailyActivitySuitability` were not in scope.
+   - Green (exit 0): 3 tests, 0 failures.
+
+### Domain boundaries
+
+- Complete non-optional `DailyForecast`; partial API data is rejected before
+  Domain and reported as `missingCriticalData`, never score 0.
+- `CivilDate` plus Forecast-returned IANA timezone; no fixed UTC offset.
+- `DailyActivitySuitability` derives its level from its bounded score.
+- `LocationRepository`, `ForecastRepository`, and `ActivityScoring` are
+  Domain-owned `Sendable` substitution boundaries.
+- No scoring arithmetic, DTOs, networking, use cases, ViewModels, or UI.
+
+### Verification (2026-09-04)
+
+- Project and shared `ActivityWeather` scheme rediscovered with `xcodebuild`;
+  iPhone 17 and iPhone 16e (iOS 26.2) were available.
+- App build on iPhone 17: **BUILD SUCCEEDED** (exit 0).
+- The first two full-suite runs on iPhone 17 and the first on iPhone 16e failed
+  before unit-test execution because SpringBoard rejected the app preflight as
+  `Busy` (exit 65). This was simulator infrastructure, not an assertion or
+  compiler failure.
+- After shutting down simulator runtimes, booting the discovered iPhone 16e,
+  and waiting for boot completion, the unchanged full suite
+  **TEST SUCCEEDED** (exit 0): 15 unit tests, 0 failures; UI target 0 tests as
+  expected until milestone 11.
+- Warning: AppIntents metadata extraction skipped because the app has no
+  AppIntents dependency (unchanged from earlier milestones).

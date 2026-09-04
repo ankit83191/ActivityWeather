@@ -110,3 +110,36 @@ Architecture Decision Records for Activity Weather. Newest last. Status is Accep
 **Decision:** Use the rule-based model in [SCORING.md](SCORING.md). It is an **explainable product heuristic**, not a validated scientific model. Surfing is a Forecast **weather proxy**, not a Marine-API surf forecast.
 
 **Consequences:** Milestone 7 implements the tables as deterministic pure functions with unit tests. Changing a threshold is a spec change, not a silent tweak in UI code.
+
+## ADR-014: Complete forecast values and civil calendar dates in Domain
+
+**Context:** A missing weather value is not the same as unsuitable weather, and
+Foundation `Date` represents an instant rather than the location-local calendar
+day ranked by this product. A single UTC offset is also wrong for a seven-day
+window that crosses a daylight-saving transition.
+
+**Decision:**
+
+- `DailyForecast` contains every v1 scoring input as a non-optional value.
+  Data mapping must reject missing, null, non-aligned payload values before a
+  `DailyForecast` reaches Domain. The repository reports
+  `DomainError.missingCriticalData`; it does not manufacture a zero score.
+- `CivilDate` is a validated Gregorian year/month/day value. It is
+  `Comparable` by those components and models the Forecast API's daily `time`
+  value without converting local midnight to a UTC instant.
+- `WeeklyForecast` owns exactly seven unique, strictly chronological,
+  consecutive civil dates and a validated IANA timezone identifier returned by
+  the Forecast API. Domain does not store `utcOffsetSeconds`; the IANA timezone
+  remains the source of truth across daylight-saving changes.
+- `SuitabilityLevel` is derived only from `SuitabilityScore`, using the bands in
+  [SCORING.md](SCORING.md). It cannot be supplied independently.
+- `Activity.allCases` is stable display order only. The product ranks days
+  within one activity; it does not rank activities against one another.
+- Domain values and repository/scoring protocols crossing async boundaries
+  conform to `Sendable`.
+
+**Consequences:** Partial API payloads cannot masquerade as valid forecasts.
+Data mapping has responsibility for structural validation. `WeeklyForecast`
+imports Foundation only to validate `TimeZone`; the remaining Domain values use
+the Swift standard library. Later use cases sort `[DailyActivitySuitability]`
+by score descending, then `CivilDate` ascending.

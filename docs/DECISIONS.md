@@ -429,3 +429,35 @@ infrastructure translation. Existing request contracts, scoring, timezone
 validation, and navigation architecture are unchanged. Simulator inspection
 supports accessibility verification, but spoken VoiceOver behavior still
 requires a physical-device check for full confidence.
+
+## ADR-023: Reproducible public submission snapshot
+
+**Context:** Final documentation must let a reviewer understand, build, test,
+and discuss the project without machine-specific setup or overstating
+verification.
+
+**Decision:**
+
+- Keep milestone 12 documentation/assets-only. A production defect discovered
+  during audit would be stopped and proposed as a separate focused fix.
+- README commands discover an available iPhone or iPad Simulator instead of
+  naming a model or UUID. Simulator execution requires no signing team and no
+  Open-Meteo API key.
+- Three non-sensitive Simulator screenshots document search, ranked forecast,
+  and scoring explanation. Images live under `docs/assets`.
+- Final verification exports the staged Git index to a new temporary directory,
+  then clean-builds and tests that exported snapshot. This verifies the
+  proposed commit contents rather than relying on the working tree or old
+  `HEAD`.
+- Current tracked files and all reachable Git history are scanned for common
+  credential patterns without displaying candidate values. Repository
+  configuration, target membership, remote URL form, and layer direction are
+  reviewed separately.
+- TDD claims name only captured failing evidence. Milestone 6 is described as
+  comprehensively test-backed, not strictly test-first; SwiftUI layout uses UI
+  smoke/manual evidence. Commit history is reviewed for understandable scope,
+  but historical commits are not claimed to have been rebuilt.
+
+**Consequences:** A fresh clone has portable run/test guidance and a concise
+interview narrative. Final executable claims apply to the staged snapshot;
+remaining manual and physical-device limitations stay explicit.

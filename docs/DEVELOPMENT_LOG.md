@@ -648,3 +648,136 @@ test without expanding product scope.
   was reported.
 - No scoring weights/rules, API request contracts, timezone validation,
   navigation architecture, persistence, or caching changed.
+
+## 2026-09-04 — Milestone 12: public submission audit
+
+Finalized the public guide, submission evidence, architecture narrative, and
+reviewer audit without changing production or test behavior.
+
+### Documentation and assets
+
+- Reworked `README.md` with purpose, features, portable run/test commands,
+  screenshots, request flow, architecture, scoring, error/accessibility
+  behavior, limitations, TDD accuracy, AI disclosure, attribution/licensing,
+  future work, and a documentation index.
+- Added `docs/INTERVIEW_WALKTHROUGH.md` covering problem framing,
+  assumptions, dependency inversion, state/request flow, scoring, concurrency,
+  testing, accessibility, trade-offs, scalability, AI verification, and future
+  improvements.
+- Added three non-sensitive iPhone 16e Simulator images:
+  - `docs/assets/location-search-results.png` — 1170×2532, 233,007 bytes
+  - `docs/assets/ranked-activity-forecast.png` — 1170×2532, 236,825 bytes
+  - `docs/assets/scoring-explanation.png` — 1170×2532, 203,595 bytes
+- Updated assumptions, approach, decisions, and AI disclosure. No production,
+  test, project, scheme, fixture, or dependency file is part of this milestone.
+
+### Submission audit
+
+- Starting point: `9edf28d feat: improve resilience and accessibility`; clean
+  working tree.
+- Shared `ActivityWeather` scheme is tracked and includes app, unit, and UI
+  targets. Deployment target is iOS 17.0. `DEVELOPMENT_TEAM` is empty in every
+  configuration; Simulator use needs no personal signing.
+- Bundle identifiers are explicit and test targets depend on the app. Fixture
+  JSON files belong only to the unit-test resource phase; the app resource
+  phase contains only `Assets.xcassets`.
+- No Swift Package, CocoaPods, Carthage, or third-party dependency manifest was
+  found.
+- Current production source contains no `try!`, `as!`, `fatalError`,
+  `preconditionFailure`, TODO/FIXME marker, or force unwrap. Test-only force
+  unwraps are limited to controlled static URL/HTTP response construction and
+  an XCTest setup implicitly-unwrapped property; each was reviewed rather than
+  mechanically rewritten.
+- No `SuitabilityReason.rawValue` is displayed. Presentation uses
+  `SuitabilityLevel.rawValue` only for its intentionally user-facing
+  `Poor/Fair/Good/Great` text.
+- Domain contains no Data/DTO/network references. Features contain no DTO,
+  endpoint, API client/error, URLSession, mapper-error, or scoring-engine
+  reference. The dependency direction remains Presentation → Domain ← Data.
+- Visible attribution was confirmed in source and the final forecast
+  screenshot: forecast data links to Open-Meteo; search results link to
+  Open-Meteo and GeoNames; score copy identifies application transformations
+  and disclaims Open-Meteo endorsement.
+- Tracked-file audit found 111 files at the starting commit and zero
+  `xcuserdata`, DerivedData/build output, `.DS_Store`, `.env`, certificate,
+  provisioning-profile, or Xcode user-state files.
+- Secret-pattern audit across all reachable commits found zero paths matching
+  private-key headers, GitHub-token forms, common cloud access-key forms, or
+  quoted secret assignments. The `origin` URL has no embedded credentials.
+  Candidate values were never printed.
+- The 13-commit history was reviewed as a readable milestone sequence with no
+  merges. Historical commits were not individually rebuilt; executable
+  verification applies to the final staged snapshot only.
+
+### Manual journey and screenshot capture
+
+A temporary UI-driving test method was used to make live Simulator interaction
+and screenshots repeatable without adding a production fixture hook. It was
+removed completely before staging.
+
+On iPhone 16e, iOS 26.2:
+
+1. Launched the app and searched the live API for Paris.
+2. Confirmed multiple ambiguous results and explicitly selected Paris,
+   Île-de-France, France.
+3. Loaded the seven-day `Europe/Paris` forecast.
+4. Switched through skiing, surfing, outdoor, and indoor; for every activity,
+   confirmed the first card and navigated to positional rank 7.
+5. Opened the scoring explanation and captured its bands and limitations.
+6. Dismissed it, navigated back, and confirmed the `Paris` query and results
+   remained.
+
+The repeatable journey passed in 101.386 seconds. The temporary method called
+the live API, so it is manual submission evidence, not part of the committed
+automated suite.
+
+The safely reproduced offline/retry evidence occurred during final milestone
+11 validation on the same `9edf28d` snapshot: a Paris forecast request reached
+the connection failure screen, displayed offline recovery copy, and succeeded
+after **Try Again**. Milestone 12 did not manufacture another outage or add a
+network test hook. HTTP-status and invalid-data screens were not manually
+forced; deterministic repository and ViewModel tests cover them.
+
+### TDD statement
+
+Milestone 12 is documentation/audit work, so TDD does not apply. Strict Red →
+Green → Refactor is claimed only for milestones with recorded focused
+failures. Milestone 6 was comprehensive fixture-backed testing but is not
+claimed as strict test-first. SwiftUI layout evidence comes from the stable UI
+smoke and manual visual/accessibility inspection.
+
+### Final staged-snapshot verification
+
+The Git index was exported with:
+
+```sh
+EXPORT_DIR=$(mktemp -d /tmp/activity-weather-staged.XXXXXX)
+DERIVED_DIR=$(mktemp -d /tmp/activity-weather-derived.XXXXXX)
+git checkout-index --all --prefix="$EXPORT_DIR/"
+SIMULATOR_ID=$(
+  xcrun simctl list devices available |
+  awk -F '[()]' '/iPhone|iPad/ && /Booted|Shutdown/ { print $2; exit }'
+)
+```
+
+The export contained no `.git` directory. The discovered destination was an
+iPhone 17 Pro Simulator; no public command assumes that model or UUID.
+
+```sh
+xcodebuild -project "$EXPORT_DIR/ActivityWeather.xcodeproj" \
+  -scheme ActivityWeather \
+  -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
+  -derivedDataPath "$DERIVED_DIR" clean build
+
+xcodebuild -project "$EXPORT_DIR/ActivityWeather.xcodeproj" \
+  -scheme ActivityWeather \
+  -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
+  -derivedDataPath "$DERIVED_DIR" test
+```
+
+- Clean build: **BUILD SUCCEEDED**, exit 0.
+- Complete suite: **TEST SUCCEEDED**, exit 0.
+- **152 unit tests + 1 UI test**, 0 failures, 0 skipped.
+- No flaky retry was needed.
+- Warning: AppIntents metadata extraction was skipped because the target does
+  not link AppIntents. No compiler warning was reported.

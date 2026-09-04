@@ -12,9 +12,10 @@ People planning outdoor and indoor activities need weather that is already inter
 4. View a seven-day forecast with per-day rankings for skiing, surfing, outdoor sightseeing and indoor sightseeing.
 5. Inspect why a rank was given (explainable scoring, not a black-box score).
 
-Product rules: [ASSUMPTIONS.md](ASSUMPTIONS.md). Scoring contract: [SCORING.md](SCORING.md).
-
-Milestone 1 ships only a truthful placeholder screen (app name and one-line purpose). Search, networking, scoring and forecast UI are later milestones.
+Product rules: [ASSUMPTIONS.md](ASSUMPTIONS.md). Scoring contract:
+[SCORING.md](SCORING.md). The twelve milestones below are now implemented;
+their evidence and final verification are recorded in
+[DEVELOPMENT_LOG.md](DEVELOPMENT_LOG.md).
 
 ## Milestones
 
@@ -58,11 +59,10 @@ Folders are created when a milestone adds types. Empty placeholder types are not
 - `ActivityWeather/Data/Repositories`
 - `ActivityWeather/Features/LocationSearch`
 - `ActivityWeather/Features/ActivityForecast`
-- `ActivityWeather/DesignSystem`
-- `ActivityWeather/Resources`
 - Mirrored groups under `ActivityWeatherTests`
 
-`ActivityWeatherUITests` exists as standard Xcode scaffold and stays unused until milestone 11.
+`ActivityWeatherUITests` contains the deterministic launch/minimum-query smoke
+introduced in milestone 11.
 
 ## Test strategy
 
@@ -83,7 +83,8 @@ For behavioural milestones, record the failing test and the reason it failed in 
 - Ranked, explainable scores for the four activities.
 - Unit tests for scoring, mapping, repositories, use cases and ViewModels.
 - Accessibility and UI smoke coverage in milestone 11.
-- Decisions, development log and AI usage kept current.
+- Public submission guide, screenshots, interview walkthrough, decisions,
+  development log, and AI usage kept current.
 
 ## MVP exclusions
 

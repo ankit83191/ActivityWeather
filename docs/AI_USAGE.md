@@ -319,3 +319,30 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - Rejected colour-only score and selection communication, a DesignSystem
   abstraction, snapshots, analytics, persistence, caching, and unrelated
   cleanup.
+
+## Milestone 12
+
+**Accepted after audit:**
+
+- Documentation/assets-only finalization after confirming the milestone 11
+  commit and clean working tree.
+- Portable simulator discovery, explicit architecture/request flow, precise
+  limitations, provider licensing, and a focused interview walkthrough.
+- Three screenshots captured from a live final-build journey using a temporary
+  UI-driving test method; the method was fully removed before staging.
+- Staged-index export for clean-snapshot build/test verification.
+- Secret-pattern checks across current tracked files and reachable Git history
+  that report only categories/counts/paths, never candidate values.
+- Clear separation between current executable verification and review of
+  historical commit scope.
+
+**Rejected / constrained:**
+
+- Rejected hardcoded Simulator UUIDs/models in public instructions.
+- Rejected claiming that every historical commit was rebuilt.
+- Rejected claiming strict test-first TDD where only comprehensive
+  after-the-fact test evidence exists, especially milestone 6.
+- Rejected adding a production fixture hook for screenshots or manual failure
+  states.
+- Rejected hiding attribution, surfing limitations, physical-device VoiceOver
+  gaps, or offline-cache limitations in secondary documentation.

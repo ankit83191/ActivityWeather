@@ -37,6 +37,13 @@ v1 treats **every field listed in the scoring specification as required**. There
 
 The public Forecast and Geocoding endpoints do not require an API key for non-commercial use. Automated tests must **not** call the live network: they would be nondeterministic and would depend on an external service. From milestone 4 onward, repository tests use **fixtures** and an **injected mocked transport** (for example a `URLProtocol` stub). The app itself performs **one forecast request per explicit location selection**. No polling, no background refresh, no forecast cache.
 
+Open-Meteo API data are attributed under
+[CC BY 4.0](https://open-meteo.com/en/license), and location data are based on
+[GeoNames](https://www.geonames.org/). The app shows attribution near search
+results and forecast data. Activity scores are original application
+transformations of the source weather data; neither provider endorses the
+scoring model.
+
 ## MVP exclusions
 
 Not in version one:

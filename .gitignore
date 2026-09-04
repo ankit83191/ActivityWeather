@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode user-specific
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+*.moved-aside
+*.hmap
+timeline.xctimeline
+playground.xcworkspace
+
+# Build output and DerivedData
+build/
+Build/
+DerivedData/
+.derivedData/
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+# Swift Package Manager / local package resolution
+.build/
+.swiftpm/
+
+# Secrets and credentials (none should exist in this project)
+.env
+.env.*
+*.pem
+*.p12
+*.mobileprovision
+secrets.*
+Credentials.plist
+
+# Playgrounds
+*.playground
+*.xcplayground

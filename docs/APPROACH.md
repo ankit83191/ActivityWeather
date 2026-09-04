@@ -12,6 +12,8 @@ People planning outdoor and indoor activities need weather that is already inter
 4. View a seven-day forecast with per-day rankings for skiing, surfing, outdoor sightseeing and indoor sightseeing.
 5. Inspect why a rank was given (explainable scoring, not a black-box score).
 
+Product rules: [ASSUMPTIONS.md](ASSUMPTIONS.md). Scoring contract: [SCORING.md](SCORING.md).
+
 Milestone 1 ships only a truthful placeholder screen (app name and one-line purpose). Search, networking, scoring and forecast UI are later milestones.
 
 ## Milestones
@@ -88,7 +90,9 @@ For behavioural milestones, record the failing test and the reason it failed in 
 - Accounts, authentication and user profiles
 - On-device persistence, favourites and recent-search storage
 - Push notifications, widgets, Live Activities, complications
-- Maps, offline caching of forecasts, background refresh
+- Maps, offline caching of forecasts, background refresh, device location permission
+- Multiple-city comparison, search history, a product backend
+- Resort/beach discovery; Open-Meteo Marine API in v1
 - Additional activities beyond the four listed
 - Third-party SDKs, analytics and crash reporters
 - App Store submission assets beyond what the engineering repo requires

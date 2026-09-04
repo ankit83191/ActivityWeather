@@ -97,3 +97,16 @@ Architecture Decision Records for Activity Weather. Newest last. Status is Accep
 **Decision:** User-visible name is **Activity Weather** (`CFBundleDisplayName` and placeholder copy). Project, targets, scheme, product name and Swift module remain **ActivityWeather**.
 
 **Consequences:** Simulator bundle is `ActivityWeather.app`. SpringBoard label is Activity Weather.
+
+## ADR-013: Rule-based scoring (not binary rules, opaque formulas, or ML)
+
+**Context:** The product must rank four activities for seven days and **explain why**. Open-Meteo returns physical quantities and WMO codes, not activity labels. Alternatives considered:
+
+1. **Binary rules** (“ski if snow else don’t”) — easy to explain, but cannot rank a decent day above a marginal one, and cannot show partial suitability.
+2. **Opaque weighted formulas** (unnamed coefficients, undocumented caps) — can rank, but fails the “inspect why” user flow and is untestable as a specification.
+3. **Machine learning** — unjustified with no labelled dataset, conflicts with Apple-only MVP, and cannot emit stable reason codes without a second model.
+4. **Rule-based scoring with named weights** — integer `0...100`, named contributions, explicit veto/cap/unavailable paths.
+
+**Decision:** Use the rule-based model in [SCORING.md](SCORING.md). It is an **explainable product heuristic**, not a validated scientific model. Surfing is a Forecast **weather proxy**, not a Marine-API surf forecast.
+
+**Consequences:** Milestone 7 implements the tables as deterministic pure functions with unit tests. Changing a threshold is a spec change, not a silent tweak in UI code.

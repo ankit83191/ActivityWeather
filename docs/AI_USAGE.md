@@ -28,3 +28,23 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - Setting or changing Git `user.name` / `user.email`.
 
 **Documentation check:** Swift 6 language mode and Observation (`@Observable`) align with current Apple guidance for new SwiftUI apps; TCA was not introduced (third-party, out of scope).
+
+## Milestone 2
+
+**Accepted (after review against [Open-Meteo Forecast docs](https://open-meteo.com/en/docs) and [Marine API docs](https://open-meteo.com/en/docs/marine-weather-api)):**
+
+- Daily field names from the official Forecast `daily` list (`weather_code`, `temperature_2m_max` / `_min`, `apparent_temperature_max`, `precipitation_sum`, `rain_sum`, `snowfall_sum`, `precipitation_hours`, `wind_speed_10m_max`, `wind_gusts_10m_max`, `sunshine_duration`, `daylight_duration`, `uv_index_max`).
+- `timezone=auto` as the only Forecast timezone mode; interpret dates using the timezone **returned** by Forecast.
+- Unavailable/`missingCriticalData` distinct from score `0`.
+- WMO `75`/`86` (heavy snow) and `82` (violent rain showers) as indoor travel-risk caps, not skiing outdoor vetoes; thunderstorms `95`/`96`/`99` and freezing rain `66`/`67` as outdoor vetoes.
+- Rule-based scoring (ADR-013) instead of binary rules, opaque formulas, or ML.
+- Surfing labelled as a weather proxy; Marine API fields not used in v1.
+
+**Rejected / not used:**
+
+- Rejected real-network automated tests because they would be nondeterministic and unnecessarily depend on an external service. Repository tests will use fixtures and an injected mocked transport.
+- Using geocoding timezone interchangeably with Forecast `timezone=auto`.
+- Mapping missing fields to score `0`.
+- Treating heavy snowfall as automatically equivalent to ideal skiing weather.
+- Indoor score as `100 - outdoorScore`.
+- Live Open-Meteo calls or Swift scoring types in this documentation-only milestone.

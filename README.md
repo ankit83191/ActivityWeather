@@ -41,6 +41,8 @@ Lightweight Clean Architecture (Domain, Data, Features) with MVVM-style presenta
 ## Documentation
 
 - [Approach](docs/APPROACH.md)
+- [Assumptions](docs/ASSUMPTIONS.md)
+- [Scoring](docs/SCORING.md)
 - [Decisions](docs/DECISIONS.md)
 - [Development log](docs/DEVELOPMENT_LOG.md)
 - [AI usage](docs/AI_USAGE.md)

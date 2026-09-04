@@ -43,3 +43,30 @@ Test targets contain compiling scaffolds only. There are **no** `XCTAssertTrue(t
 ### Not in this milestone
 
 Networking, Open-Meteo clients, domain models, scoring, search UI, forecast UI, persistence, third-party packages, secrets.
+
+## 2026-09-04 — Milestone 2: product assumptions and scoring specification
+
+Documentation-only. No Swift, networking, or scoring engine.
+
+### What shipped
+
+- `docs/ASSUMPTIONS.md` — suitability vs infrastructure, explicit geocoding selection, seven metric days, `timezone=auto` + Forecast-returned timezone, surfing as weather proxy, independent indoor rules, unavailable ≠ 0, test/network policy, MVP exclusions
+- `docs/SCORING.md` — required daily fields, named weights/thresholds/caps/reason codes, WMO outdoor veto vs indoor cap vs penalty, skiing fresh snow vs heavy active snowfall, worked examples
+- ADR-013 in `docs/DECISIONS.md`
+- README / APPROACH / AI_USAGE links and review notes
+
+### TDD
+
+Not applicable. Documentation-only; no behavioural production code.
+
+### Verification (2026-09-04)
+
+- Simulator rediscovered: iPhone 17, iOS 26.2, id `095EEBAB-7398-4FA5-94B5-EE546882F7EF`
+- `xcodebuild` **BUILD SUCCEEDED** (exit 0), `-derivedDataPath .derivedData`
+- `xcodebuild test` **TEST SUCCEEDED** (exit 0). Executed **0 tests** twice (unit + UI). Expected: still no behavioural tests
+- No Swift files modified; placeholder app unchanged
+- Warning: AppIntents metadata skipped (same as milestone 1)
+
+### Not in this milestone
+
+Domain types, networking, scoring implementation, search/forecast UI.

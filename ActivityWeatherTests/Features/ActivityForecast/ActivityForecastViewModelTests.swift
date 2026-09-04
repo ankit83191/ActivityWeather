@@ -72,6 +72,7 @@ final class ActivityForecastViewModelTests: XCTestCase {
         await waitUntil { await harness.repository.requestCount == 1 }
         await harness.repository.complete(0, with: .failure(TestForecastFailure.expected))
         await waitUntil { harness.viewModel.status == .failure }
+        XCTAssertEqual(harness.viewModel.failure, .generic)
 
         harness.viewModel.retry()
         await waitUntil { await harness.repository.requestCount == 2 }
@@ -104,8 +105,31 @@ final class ActivityForecastViewModelTests: XCTestCase {
         await waitUntil { await harness.repository.requestCount == 2 }
 
         XCTAssertEqual(harness.viewModel.status, .loading)
+        XCTAssertNil(harness.viewModel.failure)
         let requestCount = await harness.repository.requestCount
         XCTAssertEqual(requestCount, 2)
+    }
+
+    func testMapsEveryRepositoryFailureToPresentationCategory() async throws {
+        let cases: [(RepositoryFailure, UserFacingFailure)] = [
+            (.offline, .connection),
+            (.serviceUnavailable, .service),
+            (.invalidData, .invalidData),
+            (.unknown, .generic)
+        ]
+
+        for (repositoryFailure, expected) in cases {
+            let harness = try makeHarness()
+            harness.viewModel.load()
+            await waitUntil { await harness.repository.requestCount == 1 }
+            await harness.repository.complete(
+                0,
+                with: .failure(repositoryFailure)
+            )
+            await waitUntil { harness.viewModel.status == .failure }
+
+            XCTAssertEqual(harness.viewModel.failure, expected)
+        }
     }
 
     func testCancellationIsNotFailureAndCancelledLoadCanReload() async throws {
@@ -116,6 +140,7 @@ final class ActivityForecastViewModelTests: XCTestCase {
         harness.viewModel.cancel()
 
         XCTAssertEqual(harness.viewModel.status, .idle)
+        XCTAssertNil(harness.viewModel.failure)
 
         harness.viewModel.load()
         await waitUntil { await harness.repository.requestCount == 2 }

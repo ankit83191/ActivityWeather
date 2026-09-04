@@ -50,11 +50,13 @@ final class LocationSearchViewModelTests: XCTestCase {
 
         let queriesBeforeRelease = await harness.repository.queries
         XCTAssertEqual(queriesBeforeRelease, [])
+        XCTAssertEqual(harness.viewModel.status, .idle)
         await harness.sleeper.releaseNext()
         await waitUntil { await harness.repository.queries == ["Paris"] }
 
         let queriesAfterRelease = await harness.repository.queries
         XCTAssertEqual(queriesAfterRelease, ["Paris"])
+        XCTAssertEqual(harness.viewModel.status, .loading)
     }
 
     func testSubmitBypassesDebounce() async {
@@ -88,6 +90,29 @@ final class LocationSearchViewModelTests: XCTestCase {
         XCTAssertEqual(queries, ["London"])
     }
 
+    func testEditingAfterResultsKeepsResultsDuringDebounce() async throws {
+        let harness = makeHarness()
+        let paris = try location(id: 1, name: "Paris")
+
+        harness.viewModel.updateQuery("Paris")
+        harness.viewModel.submit()
+        await waitUntil { await harness.repository.queries == ["Paris"] }
+        await harness.repository.complete(query: "Paris", with: .success([paris]))
+        await waitUntil { harness.viewModel.status == .results([paris]) }
+
+        harness.viewModel.updateQuery("London")
+
+        XCTAssertEqual(harness.viewModel.status, .results([paris]))
+        let queries = await harness.repository.queries
+        XCTAssertEqual(queries, ["Paris"])
+
+        await harness.sleeper.releaseNext()
+        await waitUntil {
+            await harness.repository.queries == ["Paris", "London"]
+        }
+        XCTAssertEqual(harness.viewModel.status, .loading)
+    }
+
     func testCancellationDoesNotBecomeFailure() async {
         let harness = makeHarness()
 
@@ -102,6 +127,7 @@ final class LocationSearchViewModelTests: XCTestCase {
         await drainTasks()
 
         XCTAssertEqual(harness.viewModel.status, .idle)
+        XCTAssertNil(harness.viewModel.failure)
     }
 
     func testStaleResultCannotReplaceNewerQuery() async throws {
@@ -197,6 +223,30 @@ final class LocationSearchViewModelTests: XCTestCase {
         await waitUntil { harness.viewModel.status == .failure }
 
         XCTAssertEqual(harness.viewModel.status, .failure)
+        XCTAssertEqual(harness.viewModel.failure, .generic)
+    }
+
+    func testMapsEveryRepositoryFailureToPresentationCategory() async {
+        let cases: [(RepositoryFailure, UserFacingFailure)] = [
+            (.offline, .connection),
+            (.serviceUnavailable, .service),
+            (.invalidData, .invalidData),
+            (.unknown, .generic)
+        ]
+
+        for (repositoryFailure, expected) in cases {
+            let harness = makeHarness()
+            harness.viewModel.updateQuery("Paris")
+            harness.viewModel.submit()
+            await waitUntil { await harness.repository.queries == ["Paris"] }
+            await harness.repository.complete(
+                query: "Paris",
+                with: .failure(repositoryFailure)
+            )
+            await waitUntil { harness.viewModel.status == .failure }
+
+            XCTAssertEqual(harness.viewModel.failure, expected)
+        }
     }
 
     func testRetryIsImmediateAndUsesFailedNormalizedQuery() async {
@@ -220,6 +270,7 @@ final class LocationSearchViewModelTests: XCTestCase {
         let sleepCountAfterRetry = await harness.sleeper.totalSleepCount
         XCTAssertEqual(sleepCountAfterRetry, sleepCountBeforeRetry)
         XCTAssertEqual(harness.viewModel.status, .loading)
+        XCTAssertNil(harness.viewModel.failure)
     }
 
     func testSelectingResultAndEditingQueryUpdatesSelection() async throws {

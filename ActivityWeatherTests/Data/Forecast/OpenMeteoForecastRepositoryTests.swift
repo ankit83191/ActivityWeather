@@ -21,29 +21,65 @@ final class OpenMeteoForecastRepositoryTests: XCTestCase {
         XCTAssertNil(queryValue("utc_offset_seconds", in: components))
     }
 
-    func testPropagatesTransportError() async throws {
+    func testMapsConnectivityTransportErrorToOffline() async throws {
         let client = ForecastStubAPIClient(behaviour: .api(.transport(URLError(.notConnectedToInternet))))
         let repository = OpenMeteoForecastRepository(client: client)
 
         do {
             _ = try await repository.forecast(for: try sampleLocation())
-            XCTFail("Expected transport")
-        } catch let APIError.transport(urlError) {
-            XCTAssertEqual(urlError.code, .notConnectedToInternet)
+            XCTFail("Expected offline")
+        } catch let error as RepositoryFailure {
+            XCTAssertEqual(error, .offline)
         } catch {
             XCTFail("Unexpected \(error)")
         }
     }
 
-    func testPropagatesDecodingError() async throws {
-        let client = ForecastStubAPIClient(behaviour: .api(.decoding))
+    func testMapsServiceStatusesToServiceUnavailable() async throws {
+        for status in [429, 500, 503] {
+            let client = ForecastStubAPIClient(behaviour: .api(.httpStatus(status)))
+            let repository = OpenMeteoForecastRepository(client: client)
+
+            do {
+                _ = try await repository.forecast(for: try sampleLocation())
+                XCTFail("Expected service unavailable for \(status)")
+            } catch let error as RepositoryFailure {
+                XCTAssertEqual(error, .serviceUnavailable)
+            } catch {
+                XCTFail("Unexpected \(error)")
+            }
+        }
+    }
+
+    func testMapsInvalidInfrastructureResponsesToInvalidData() async throws {
+        for apiError: APIError in [
+            .decoding,
+            .nonHTTPResponse,
+            .invalidRequest
+        ] {
+            let client = ForecastStubAPIClient(behaviour: .api(apiError))
+            let repository = OpenMeteoForecastRepository(client: client)
+
+            do {
+                _ = try await repository.forecast(for: try sampleLocation())
+                XCTFail("Expected invalid data for \(apiError)")
+            } catch let error as RepositoryFailure {
+                XCTAssertEqual(error, .invalidData)
+            } catch {
+                XCTFail("Unexpected \(error)")
+            }
+        }
+    }
+
+    func testMapsUnrecognizedHTTPStatusToUnknown() async throws {
+        let client = ForecastStubAPIClient(behaviour: .api(.httpStatus(400)))
         let repository = OpenMeteoForecastRepository(client: client)
 
         do {
             _ = try await repository.forecast(for: try sampleLocation())
-            XCTFail("Expected decoding")
-        } catch let error as APIError {
-            XCTAssertEqual(error, .decoding)
+            XCTFail("Expected unknown")
+        } catch let error as RepositoryFailure {
+            XCTAssertEqual(error, .unknown)
         } catch {
             XCTFail("Unexpected \(error)")
         }
@@ -83,27 +119,22 @@ final class OpenMeteoForecastRepositoryTests: XCTestCase {
         }
     }
 
-    func testPropagatesMappingErrors() async throws {
+    func testMapsForecastMappingErrorsToInvalidData() async throws {
         let dto = try ForecastFixture.decodeResponse(named: "forecast_unexpected_unit")
         let client = ForecastStubAPIClient(behaviour: .success(dto))
         let repository = OpenMeteoForecastRepository(client: client)
 
         do {
             _ = try await repository.forecast(for: try sampleLocation())
-            XCTFail("Expected unexpectedUnit")
-        } catch let error as ForecastMappingError {
-            XCTAssertEqual(
-                error,
-                .unexpectedUnit(field: "temperature_2m_max", expected: "°C", actual: "°F")
-            )
-        } catch let error as DomainError {
-            XCTFail("Unexpected unit became DomainError \(error)")
+            XCTFail("Expected invalid data")
+        } catch let error as RepositoryFailure {
+            XCTAssertEqual(error, .invalidData)
         } catch {
             XCTFail("Unexpected \(error)")
         }
     }
 
-    func testWrongJSONTypeThroughAPIClientIsDecoding() async throws {
+    func testWrongJSONTypeThroughAPIClientMapsToInvalidData() async throws {
         let host = "api.open-meteo.com"
         let payload = try ForecastFixture.data(named: "forecast_wrong_types")
         let url = URL(string: "https://\(host)/v1/forecast")!
@@ -124,9 +155,9 @@ final class OpenMeteoForecastRepositoryTests: XCTestCase {
 
         do {
             _ = try await repository.forecast(for: try sampleLocation())
-            XCTFail("Expected decoding")
-        } catch let error as APIError {
-            XCTAssertEqual(error, .decoding)
+            XCTFail("Expected invalid data")
+        } catch let error as RepositoryFailure {
+            XCTAssertEqual(error, .invalidData)
         } catch {
             XCTFail("Unexpected \(error)")
         }

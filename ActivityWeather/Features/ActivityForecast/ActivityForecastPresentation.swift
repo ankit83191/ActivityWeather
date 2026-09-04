@@ -141,6 +141,37 @@ enum ActivityForecastPresentation {
         }
     }
 
+    static func accessibilitySummary(
+        for row: RankedForecastDay,
+        timeZoneIdentifier: String,
+        locale: Locale = .current
+    ) -> String {
+        let date = ForecastDateFormatting.string(
+            for: row.suitability.date,
+            timeZoneIdentifier: timeZoneIdentifier,
+            locale: locale
+        ) ?? "Date unavailable"
+        let facts = weatherFacts(
+            for: row.forecast,
+            activity: row.suitability.activity,
+            locale: locale
+        )
+        .map { "\($0.label) \($0.value)." }
+        .joined(separator: " ")
+
+        var summary = "Rank \(row.rank). \(date). "
+            + "Score \(row.suitability.score.value) out of 100, "
+            + "\(row.suitability.level.rawValue). \(facts)"
+
+        if !row.suitability.reasons.isEmpty {
+            let reasons = row.suitability.reasons
+                .map(\.presentationText)
+                .joined(separator: "; ")
+            summary += " Reasons: \(reasons)."
+        }
+        return summary
+    }
+
     private static func metric(
         _ value: Double,
         unit: String,

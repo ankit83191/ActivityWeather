@@ -115,6 +115,31 @@ final class ActivityForecastPresentationTests: XCTestCase {
         )
     }
 
+    func testRankingAccessibilitySummaryFollowsVisualReadingOrder() throws {
+        let day = try ScoringFixture.day()
+        let row = RankedForecastDay(
+            rank: 1,
+            suitability: DailyActivitySuitability(
+                day: day,
+                activity: .skiing,
+                score: SuitabilityScore(clamping: 75),
+                reasons: [.criticalThunderstorm]
+            ),
+            forecast: day
+        )
+
+        XCTAssertEqual(
+            ActivityForecastPresentation.accessibilitySummary(
+                for: row,
+                timeZoneIdentifier: "Asia/Kolkata",
+                locale: Locale(identifier: "en_US")
+            ),
+            "Rank 1. Friday, September 4. Score 75 out of 100, Great. "
+                + "Temperature 0 °C. Snow 0 cm. Wind gust 25 km/h. "
+                + "Reasons: Thunderstorm makes outdoor activity unsafe."
+        )
+    }
+
     func testReasonCopyNeverUsesRawIdentifier() {
         XCTAssertEqual(
             SuitabilityReason.criticalThunderstorm.presentationText,

@@ -15,6 +15,7 @@ final class LocationSearchViewModel {
     private(set) var query = ""
     private(set) var status: LocationSearchStatus = .idle
     private(set) var selectedLocation: Location?
+    private(set) var failure: UserFacingFailure?
 
     @ObservationIgnored private let searchLocations: SearchLocationsUseCase
     @ObservationIgnored private let sleeper: any SearchSleeping
@@ -37,6 +38,7 @@ final class LocationSearchViewModel {
 
         self.query = query
         selectedLocation = nil
+        failure = nil
         failedQuery = nil
         cancelActiveSearch()
 
@@ -46,7 +48,6 @@ final class LocationSearchViewModel {
             return
         }
 
-        status = .idle
         startSearch(for: normalized, debounced: true)
     }
 
@@ -55,6 +56,7 @@ final class LocationSearchViewModel {
         let normalized = normalizedQuery
         guard normalized.count >= 2 else {
             status = .idle
+            failure = nil
             failedQuery = nil
             return
         }
@@ -97,6 +99,10 @@ final class LocationSearchViewModel {
 
     private func startSearch(for normalizedQuery: String, debounced: Bool) {
         generation += 1
+        failure = nil
+        if !debounced {
+            status = .loading
+        }
         let requestGeneration = generation
         let searchLocations = searchLocations
         let sleeper = sleeper
@@ -120,6 +126,7 @@ final class LocationSearchViewModel {
                     return
                 }
                 self?.failedQuery = nil
+                    self?.failure = nil
                 self?.status = locations.isEmpty ? .empty : .results(locations)
                 self?.activeSearchTask = nil
             } catch is CancellationError {
@@ -131,6 +138,7 @@ final class LocationSearchViewModel {
                     return
                 }
                 self?.failedQuery = normalizedQuery
+                    self?.failure = UserFacingFailure.classify(error)
                 self?.status = .failure
                 self?.activeSearchTask = nil
             }

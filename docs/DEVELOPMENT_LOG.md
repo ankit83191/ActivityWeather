@@ -557,3 +557,94 @@ and indoor rankings. No failure screen.
   0 failures; UI target **0** tests
 - Warning: AppIntents metadata extraction skipped (no AppIntents dependency)
 - Scoring rules and forecast UI were not modified
+
+## 2026-09-04 — Milestone 11: resilience and accessibility
+
+Hardened repository failures, superseding-search transitions, adaptive
+layouts, accessibility semantics, attribution, and one deterministic UI smoke
+test without expanding product scope.
+
+### What changed
+
+- Added Domain `RepositoryFailure` categories and translated infrastructure,
+  response, mapping, and Domain-integrity errors inside both Data repositories.
+  Cancellation still passes through as cancellation.
+- Presentation now maps only Domain failure categories to recovery copy; it
+  does not inspect API errors, HTTP codes, DTO errors, or raw descriptions.
+- Valid edited queries keep existing results visible during debounce, clear
+  selection, cancel obsolete work, and enter loading only when the new request
+  starts.
+- Added combined forecast-card accessibility summaries, selected traits and
+  visible selected text, button hints, stable identifiers, 48-point targets,
+  long-text wrapping, higher-contrast limitations, and adaptive ranking,
+  weather-fact, title, and activity-selector layouts.
+- Added visible Open-Meteo forecast attribution, visible Open-Meteo/GeoNames
+  search attribution, and clarified that activity scores are application
+  heuristics not endorsed by Open-Meteo.
+- Added a deterministic UI test for launch and the one-character minimum-query
+  journey. A complete stubbed UI journey was not added because it would require
+  test-specific application composition disproportionate to this assignment;
+  repository, use-case, and ViewModel journeys already have deterministic unit
+  coverage.
+
+### TDD evidence (actual)
+
+- Repository translation Red: the new connectivity regression expected
+  `backgroundSessionWasDisconnected` to map to `offline`; the initial mapper
+  returned `unknown`. Focused `xcodebuild test` exited **65**. Adding that
+  connectivity code made the test and repository mapping suites green.
+- Search-transition Red: after Paris results were loaded, editing to London
+  expected the Paris results to remain during debounce; status was `loading`.
+  Focused `xcodebuild test` exited **65**. Deferring the loading transition
+  until after the injected sleeper was released made it green.
+- ViewModel and repository tests exhaustively cover all four Domain failure
+  categories. Accessibility/layout changes were verified with the UI smoke
+  and manual inspection, not described as strict test-first TDD.
+
+### Manual validation matrix
+
+- **iPhone 16e, light, default type:** live Paris search/results and forecast;
+  visually confirmed old results remain during a replacement debounce. A
+  forecast request safely reproduced the offline screen with connection copy;
+  retry then loaded the ranking.
+- **iPhone 16e, maximum accessibility type:** search field, helper content,
+  and multi-line region/country results reflowed. Manual inspection exposed
+  severe two-column activity-button wrapping; the selector was changed to one
+  column at accessibility sizes and rebuilt.
+- **iPad Pro 13-inch, dark, maximum accessibility type:** launch/search layout
+  rendered without clipping, blank content, or contrast inversion.
+- **VoiceOver:** the Simulator VoiceOver service was enabled and the initial
+  navigation focus was observed. Combined search/card labels, values, traits,
+  hints, and reading order are covered by accessibility hierarchy and unit/UI
+  checks. Spoken traversal could not be completed reliably through automated
+  Simulator input, so physical-device spoken output remains unverified.
+- **Timezone/activity regression:** the immediately preceding corrective
+  verification covered Pune/`Asia/Kolkata`, all four activities, and seven
+  rows; Milestone 10 covered Paris/`Europe/Paris`, all four activities,
+  explanation, and preserved back-navigation state. Milestone 11 did not alter
+  scoring, timezone validation, request contracts, or navigation.
+- Long region/country text was inspected at AX5. A deliberately extreme long
+  city name was not obtained from the live API, so that specific live case
+  remains covered by wrapping constraints rather than a fixture-driven manual
+  screen.
+- Server-status and invalid-data screens were not manually induced because
+  doing so would require a production test hook. Deterministic repository and
+  ViewModel tests cover them.
+
+### Verification (2026-09-04)
+
+- Final app build:
+  `xcodebuild -project ActivityWeather.xcodeproj -scheme ActivityWeather
+  -destination 'platform=iOS Simulator,id=818F8DBA-D98B-4B09-8634-57008C4C2AEB'
+  -derivedDataPath .derivedData build` — **BUILD SUCCEEDED**, exit 0.
+- Complete suite with the same project, scheme, destination, and DerivedData
+  path using `test` — **TEST SUCCEEDED**, exit 0: **152 unit tests** and
+  **1 UI test**, 0 failures, 0 skipped.
+- Focused repository/ViewModel/presentation suite: **55 tests**, 0 failures.
+- Deterministic UI smoke: **1 test**, 0 failures.
+- IDE diagnostics: no linter errors.
+- Warning: AppIntents metadata extraction was skipped because the target has
+  no AppIntents dependency. No compiler warning, test warning, or skipped test
+  was reported.
+- No scoring weights/rules, API request contracts, timezone validation,
+  navigation architecture, persistence, or caching changed.

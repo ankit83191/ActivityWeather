@@ -3,6 +3,7 @@ import SwiftUI
 struct LocationSearchView<ForecastDestination: View>: View {
     let viewModel: LocationSearchViewModel
     @State private var navigationLocation: Location?
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     private let forecastDestination: (Location) -> ForecastDestination
 
     init(
@@ -20,6 +21,9 @@ struct LocationSearchView<ForecastDestination: View>: View {
                 content
             }
             .navigationTitle("Find a location")
+            .navigationBarTitleDisplayMode(
+                dynamicTypeSize.isAccessibilitySize ? .inline : .large
+            )
             .navigationDestination(item: $navigationLocation) { location in
                 forecastDestination(location)
             }
@@ -40,6 +44,7 @@ struct LocationSearchView<ForecastDestination: View>: View {
         .submitLabel(.search)
         .onSubmit(viewModel.submit)
         .accessibilityLabel("Search for a city or place")
+        .accessibilityIdentifier("location-search-field")
         .padding()
     }
 
@@ -57,12 +62,23 @@ struct LocationSearchView<ForecastDestination: View>: View {
             ProgressView("Searching locations")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .accessibilityLabel("Searching locations")
+                .accessibilityIdentifier("location-search-loading")
         case let .results(locations):
-            List(locations) { location in
-                locationRow(location)
+            List {
+                Section {
+                    ForEach(locations) { location in
+                        locationRow(location)
+                    }
+                } footer: {
+                    Text("Location data by [Open-Meteo](https://open-meteo.com/) and [GeoNames](https://www.geonames.org/)")
+                    .font(.footnote)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("location-data-attribution")
+                }
             }
             .listStyle(.plain)
             .scrollDismissesKeyboard(.interactively)
+            .accessibilityIdentifier("location-search-results")
         case .empty:
             message("No locations found", systemImage: "mappin.slash")
         case .failure:
@@ -82,17 +98,26 @@ struct LocationSearchView<ForecastDestination: View>: View {
                     Text(location.displayName)
                         .font(.headline)
                         .foregroundStyle(.primary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                     Text(locationSubtitle(location))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
+                        .lineLimit(2)
                 }
                 Spacer(minLength: 8)
                 if selected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.tint)
-                        .accessibilityHidden(true)
+                    VStack(spacing: 2) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.tint)
+                        Text("Selected")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .accessibilityHidden(true)
                 }
             }
+            .frame(minHeight: 48)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -100,6 +125,7 @@ struct LocationSearchView<ForecastDestination: View>: View {
         .accessibilityLabel(locationAccessibilityLabel(location))
         .accessibilityValue(selected ? "Selected" : "Not selected")
         .accessibilityAddTraits(selected ? .isSelected : [])
+        .accessibilityIdentifier("location-result-\(location.id)")
     }
 
     private var failureContent: some View {
@@ -110,13 +136,14 @@ struct LocationSearchView<ForecastDestination: View>: View {
                 .accessibilityHidden(true)
             Text("Couldn’t search locations")
                 .font(.headline)
-            Text("Check your connection and try again.")
+            Text((viewModel.failure ?? .generic).recoveryMessage)
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
             Button("Try Again", action: viewModel.retry)
                 .buttonStyle(.borderedProminent)
                 .accessibilityHint("Repeats the previous location search")
+                .accessibilityIdentifier("location-search-retry")
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -127,6 +154,7 @@ struct LocationSearchView<ForecastDestination: View>: View {
             text,
             systemImage: systemImage
         )
+        .accessibilityIdentifier("location-search-message")
     }
 
     private func locationSubtitle(_ location: Location) -> String {

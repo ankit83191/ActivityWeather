@@ -390,3 +390,42 @@ device and forecast timezones differ.
 results, and selected row. Presentation has exhaustive reason copy but no
 scoring thresholds or Data dependencies. Feature-local presentation helpers
 can move into a subfolder if this feature grows.
+
+## ADR-022: Repository failures and accessible resilient presentation
+
+**Context:** Infrastructure errors must not leak past Data, rapid query edits
+must not flash an unrelated empty state, and the complete journey must remain
+understandable without colour or compact text assumptions.
+
+**Decision:**
+
+- Domain exposes `RepositoryFailure`: `offline`, `serviceUnavailable`,
+  `invalidData`, and `unknown`. Both Open-Meteo repositories translate
+  connectivity failures, HTTP 429/5xx, response/decoding/mapping/Domain
+  integrity failures, and unknown errors at the Data boundary.
+  `CancellationError` and `URLError.cancelled` remain cancellation signals.
+- Presentation maps only `RepositoryFailure` to recovery copy. Views and
+  ViewModels do not inspect `APIError`, status codes, DTO errors, or raw error
+  descriptions.
+- A valid superseding search cancels obsolete work and clears selection while
+  keeping current results visible during the 350 ms debounce. Loading begins
+  only when the replacement request starts. Short queries still return to
+  idle; generation checks continue to ignore stale completions.
+- Activity buttons become a single column at accessibility Dynamic Type
+  sizes. Ranking headers and weather facts use adaptive layouts. Text,
+  selection labels/checkmarks, minimum touch targets, combined card summaries,
+  and stable accessibility identifiers complement visual styling.
+- The UI smoke test covers launch and the deterministic one-character search
+  boundary only. A fully stubbed UI journey was rejected because it would add
+  test-specific production composition disproportionate to this assignment;
+  repository, use-case, and ViewModel journeys already have deterministic unit
+  coverage.
+- Forecast and location-result screens visibly credit Open-Meteo and GeoNames.
+  The forecast screen also states that this application's activity scores are
+  heuristic transformations not endorsed by Open-Meteo.
+
+**Consequences:** Domain now owns a stable failure vocabulary while Data owns
+infrastructure translation. Existing request contracts, scoring, timezone
+validation, and navigation architecture are unchanged. Simulator inspection
+supports accessibility verification, but spoken VoiceOver behavior still
+requires a physical-device check for full confidence.

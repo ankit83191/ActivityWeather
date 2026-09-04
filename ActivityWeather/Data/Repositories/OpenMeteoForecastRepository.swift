@@ -6,12 +6,16 @@ struct OpenMeteoForecastRepository: ForecastRepository {
     }
 
     func forecast(for location: Location) async throws -> WeeklyForecast {
-        let response: ForecastResponseDTO = try await client.execute(
-            OpenMeteoForecastEndpoint.forecast(
-                latitude: location.coordinate.latitude,
-                longitude: location.coordinate.longitude
+        do {
+            let response: ForecastResponseDTO = try await client.execute(
+                OpenMeteoForecastEndpoint.forecast(
+                    latitude: location.coordinate.latitude,
+                    longitude: location.coordinate.longitude
+                )
             )
-        )
-        return try ForecastMapper.weeklyForecast(from: response)
+            return try ForecastMapper.weeklyForecast(from: response)
+        } catch {
+            throw RepositoryFailureMapping.map(error)
+        }
     }
 }

@@ -13,9 +13,13 @@ struct OpenMeteoLocationRepository: LocationRepository {
             return []
         }
 
-        let response: GeocodingResponseDTO = try await client.execute(
-            OpenMeteoGeocodingEndpoint.search(name: trimmed)
-        )
-        return try GeocodingLocationMapper.locations(from: response)
+        do {
+            let response: GeocodingResponseDTO = try await client.execute(
+                OpenMeteoGeocodingEndpoint.search(name: trimmed)
+            )
+            return try GeocodingLocationMapper.locations(from: response)
+        } catch {
+            throw RepositoryFailureMapping.map(error)
+        }
     }
 }

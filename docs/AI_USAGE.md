@@ -285,3 +285,37 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - Requiring `TimeZone(identifier:)?.identifier` to equal the input (that
   would rewrite aliases such as `UTC` → `GMT`).
 - Scoring or forecast UI changes.
+
+## Milestone 11
+
+**Accepted after review and tests:**
+
+- Domain repository-failure categories with exhaustive Data-boundary
+  translation in both repositories and exhaustive category mapping in both
+  ViewModels.
+- Cancellation remains control flow rather than a displayed failure.
+- Existing search results remain visible only during the superseding debounce;
+  loading starts when the request starts.
+- Combined VoiceOver forecast-card summaries, explicit selected values and
+  traits, textual score levels, larger touch targets, long-text wrapping,
+  stable identifiers, and accessibility-size adaptive layouts.
+- One deterministic launch/minimum-query UI smoke test without networking or
+  fixture-only production composition.
+- Visible provider attribution and an explicit statement that app-generated
+  heuristic scores are not provider-endorsed.
+
+**Rejected / materially changed:**
+
+- Rejected the initial Feature classifier that inspected `APIError`,
+  mapping errors, and Domain validation errors directly; infrastructure
+  translation belongs in Data and Presentation sees only Domain categories.
+- Rejected switching to loading as soon as a valid query is typed; existing
+  results remain available during the debounce interval.
+- Rejected a two-column activity selector at accessibility Dynamic Type sizes
+  after manual AX5 inspection showed severe wrapping; accessibility sizes use
+  one column.
+- Rejected live networking, arbitrary sleeps, and production fixture hooks in
+  the UI test.
+- Rejected colour-only score and selection communication, a DesignSystem
+  abstraction, snapshots, analytics, persistence, caching, and unrelated
+  cleanup.

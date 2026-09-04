@@ -12,6 +12,7 @@ enum ActivityForecastStatus: Equatable {
 final class ActivityForecastViewModel {
     private(set) var status: ActivityForecastStatus = .idle
     private(set) var selectedActivity: Activity = .skiing
+    private(set) var failure: UserFacingFailure?
 
     @ObservationIgnored private let location: Location
     @ObservationIgnored private let getActivityForecast: GetActivityForecastUseCase
@@ -75,6 +76,7 @@ final class ActivityForecastViewModel {
     private func startLoad() {
         generation += 1
         activeLoadTask?.cancel()
+        failure = nil
         status = .loading
 
         let requestGeneration = generation
@@ -88,6 +90,7 @@ final class ActivityForecastViewModel {
                 guard self?.generation == requestGeneration else {
                     return
                 }
+                self?.failure = nil
                 self?.status = .loaded(result)
                 self?.activeLoadTask = nil
             } catch is CancellationError {
@@ -97,6 +100,7 @@ final class ActivityForecastViewModel {
                       self?.generation == requestGeneration else {
                     return
                 }
+                self?.failure = UserFacingFailure.classify(error)
                 self?.status = .failure
                 self?.activeLoadTask = nil
             }

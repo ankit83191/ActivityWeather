@@ -32,30 +32,73 @@ final class OpenMeteoLocationRepositoryTests: XCTestCase {
         XCTAssertEqual(queryValue("format", in: components), "json")
     }
 
-    func testPropagatesTransportError() async {
-        let transport = URLError(.notConnectedToInternet)
-        let client = StubAPIClient(behaviour: .api(.transport(transport)))
-        let repository = OpenMeteoLocationRepository(client: client)
+    func testMapsConnectivityTransportErrorToOffline() async {
+        for code: URLError.Code in [
+            .notConnectedToInternet,
+            .networkConnectionLost,
+            .backgroundSessionWasDisconnected
+        ] {
+            let client = StubAPIClient(
+                behaviour: .api(.transport(URLError(code)))
+            )
+            let repository = OpenMeteoLocationRepository(client: client)
 
-        do {
-            _ = try await repository.locations(matching: "Berlin")
-            XCTFail("Expected transport")
-        } catch let APIError.transport(urlError) {
-            XCTAssertEqual(urlError.code, .notConnectedToInternet)
-        } catch {
-            XCTFail("Unexpected \(error)")
+            do {
+                _ = try await repository.locations(matching: "Berlin")
+                XCTFail("Expected offline for \(code)")
+            } catch let error as RepositoryFailure {
+                XCTAssertEqual(error, .offline)
+            } catch {
+                XCTFail("Unexpected \(error)")
+            }
         }
     }
 
-    func testPropagatesDecodingError() async {
-        let client = StubAPIClient(behaviour: .api(.decoding))
+    func testMapsServiceStatusesToServiceUnavailable() async {
+        for status in [429, 500, 503] {
+            let client = StubAPIClient(behaviour: .api(.httpStatus(status)))
+            let repository = OpenMeteoLocationRepository(client: client)
+
+            do {
+                _ = try await repository.locations(matching: "Berlin")
+                XCTFail("Expected service unavailable for \(status)")
+            } catch let error as RepositoryFailure {
+                XCTAssertEqual(error, .serviceUnavailable)
+            } catch {
+                XCTFail("Unexpected \(error)")
+            }
+        }
+    }
+
+    func testMapsInvalidInfrastructureResponsesToInvalidData() async {
+        for apiError: APIError in [
+            .decoding,
+            .nonHTTPResponse,
+            .invalidRequest
+        ] {
+            let client = StubAPIClient(behaviour: .api(apiError))
+            let repository = OpenMeteoLocationRepository(client: client)
+
+            do {
+                _ = try await repository.locations(matching: "Berlin")
+                XCTFail("Expected invalid data for \(apiError)")
+            } catch let error as RepositoryFailure {
+                XCTAssertEqual(error, .invalidData)
+            } catch {
+                XCTFail("Unexpected \(error)")
+            }
+        }
+    }
+
+    func testMapsUnrecognizedHTTPStatusToUnknown() async {
+        let client = StubAPIClient(behaviour: .api(.httpStatus(400)))
         let repository = OpenMeteoLocationRepository(client: client)
 
         do {
             _ = try await repository.locations(matching: "Berlin")
-            XCTFail("Expected decoding")
-        } catch let error as APIError {
-            XCTAssertEqual(error, .decoding)
+            XCTFail("Expected unknown")
+        } catch let error as RepositoryFailure {
+            XCTAssertEqual(error, .unknown)
         } catch {
             XCTFail("Unexpected \(error)")
         }
@@ -104,16 +147,16 @@ final class OpenMeteoLocationRepositoryTests: XCTestCase {
         XCTAssertEqual(locations, [])
     }
 
-    func testAllInvalidRecordsThrowMappingError() async throws {
+    func testAllInvalidRecordsMapToInvalidData() async throws {
         let dto = try GeocodingFixture.decodeResponse(named: "geocoding_all_invalid")
         let client = StubAPIClient(behaviour: .success(dto))
         let repository = OpenMeteoLocationRepository(client: client)
 
         do {
             _ = try await repository.locations(matching: "Berlin")
-            XCTFail("Expected noValidLocations")
-        } catch let error as GeocodingError {
-            XCTAssertEqual(error, .noValidLocations)
+            XCTFail("Expected invalid data")
+        } catch let error as RepositoryFailure {
+            XCTAssertEqual(error, .invalidData)
         } catch {
             XCTFail("Unexpected \(error)")
         }

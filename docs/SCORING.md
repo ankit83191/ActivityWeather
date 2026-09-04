@@ -77,9 +77,10 @@ Among **scored** days for one activity:
 
 Unavailable results are omitted from ranking (they are errors, not last-place scores).
 
-The product does **not** rank activities against one another. `Activity.allCases`
-defines display order only: skiing, surfing, outdoor sightseeing, then indoor
-sightseeing.
+Weekly ranking is derived by scoring each of the seven days independently and
+sorting that list. The product does **not** rank activities against one another.
+`Activity.allCases` defines display order only: skiing, surfing, outdoor
+sightseeing, then indoor sightseeing.
 
 ## WMO handling
 
@@ -116,18 +117,36 @@ If a veto applies to skiing, surfing, or outdoor sightseeing:
 
 `score = 0` with the matching reason (`criticalThunderstorm`, `criticalFreezingRain`, `criticalExtremeWind`). Further additive terms are skipped.
 
+When several outdoor veto conditions are true on the same day, emit **one** reason
+using this priority: thunderstorm (`95`/`96`/`99`) → freezing rain (`66`/`67`) →
+extreme gust (`wind_gusts_10m_max ≥ 90`). Raw weather values remain available to
+the UI; a selected veto reason must not hide the underlying conditions.
+
 Indoor **never** uses this veto. Indoor uses the travel-risk cap instead.
 
 ## Shared indoor travel-risk cap
 
-If any of the following is true, after additive indoor terms: `score = min(score, 40)` and emit `dangerousTravelCap`:
+If any of the following is true, after additive indoor terms: `score = min(score, 40)`.
+Emit `dangerousTravelCap` **only when the uncapped raw score exceeds 40**:
 
 - `weather_code` ∈ {`56`, `57`, `66`, `67`, `75`, `82`, `86`, `95`, `96`, `99`}
 - `wind_gusts_10m_max ≥ 80`
 
+If travel-risk is true but the additive raw score is already `≤ 40`, the cap does
+not change the score and `dangerousTravelCap` is **not** emitted.
+
 ## Reason codes
 
-Emit every code whose rule fired (including veto/cap). `missingCriticalData` appears only on unavailable results.
+Emit a reason only when that rule **changed** the score (non-zero contribution,
+or an applied veto/cap). Deduplicate by reason code.
+
+Order:
+
+1. Veto or indoor travel cap first, when it applied.
+2. Remaining reasons by **absolute contribution** descending.
+3. Equal absolute contributions by stable `SuitabilityReason.rawValue` ascending.
+
+`missingCriticalData` appears only on unavailable results.
 
 `missingCriticalData`, `criticalThunderstorm`, `criticalFreezingRain`, `criticalExtremeWind`, `dangerousTravelCap`, `stayInside`, `snowfallAmount`, `snowWeather`, `heavySnowPenalty`, `freezingDrizzlePenalty`, `rainOnSnow`, `freezeMax`, `skiWind`, `skiSunshine`, `windProxy`, `fairSky`, `surfRain`, `airTempComfort`, `snowAtCoast`, `comfortTemp`, `dry`, `sunRatio`, `uv`, `fog`, `outdoorWind`, `heavySnowWalk`, `violentRain`, `wetDay`, `longPrecip`, `rainCodes`, `tempExtreme`, `overcast`, `beautifulOutdoor`
 
@@ -154,7 +173,9 @@ Apply outdoor veto first.
 
 Inputs: `weather_code=71`, `snowfall_sum=4`, `rain_sum=0`, `temperature_2m_max=3`, `wind_speed_10m_max=30`, `wind_gusts_10m_max=40`, `sunshine_duration=7200`, plus all other required fields present and non-null.
 
-No veto. `45 + 12 (snowfallAmount) + 12 (snowWeather) + 8 (freezeMax) = 77`. Score **77**. Reasons: `snowfallAmount`, `snowWeather`, `freezeMax`.
+No veto. `45 + 12 (snowfallAmount) + 12 (snowWeather) + 8 (freezeMax) = 77`. Score **77**.
+Reasons: `snowWeather`, `snowfallAmount`, `freezeMax` (`snowfallAmount` and
+`snowWeather` both contribute 12; `snowWeather` sorts first by `rawValue`).
 
 ## Surfing (weather proxy)
 
@@ -186,7 +207,10 @@ No veto. `50 + 16 (windProxy) + 10 (fairSky) + 14 (airTempComfort) = 90`. Score 
 
 Apply outdoor veto first.
 
-Let `sunRatio = sunshine_duration / daylight_duration`. If `daylight_duration == 0` (valid polar night), `sunRatio = 0`.
+Let `sunRatio = sunshine_duration / daylight_duration`. If `daylight_duration == 0`
+(valid polar night, with `sunshine_duration == 0` because sunshine cannot exceed
+daylight), `sunRatio = 0`. Do **not** divide by zero. A ratio of `0` is a real
+value: it can still match the `< 0.12` sun-ratio penalty.
 
 | Signal | Condition | Contribution |
 |---|---|---|
@@ -235,7 +259,9 @@ No travel cap (63 is not in the cap set). `48 + 18 (wetDay) + 8 (longPrecip) + 8
 
 Inputs: `weather_code=95`, `precipitation_sum=15`, `precipitation_hours=4`, `apparent_temperature_max=20`, `wind_gusts_10m_max=40`, all required fields present.
 
-`48 + 18 (wetDay) + 6 (stayInside) = 72`, then `min(72, 40) = 40`. Score **40**. Reasons: `wetDay`, `stayInside`, `dangerousTravelCap`.
+`48 + 18 (wetDay) + 6 (stayInside) = 72`, then `min(72, 40) = 40`. Score **40**.
+Reasons: `dangerousTravelCap`, `wetDay`, `stayInside` (cap first, then absolute
+contribution).
 
 ## Bounds check (v1)
 
@@ -243,4 +269,5 @@ Theoretical raw sums before clamp stay within a few tens of points of `0...100` 
 
 ## Implementation note
 
-Milestone 7 implements this table in Domain scoring tests (Red-Green-Refactor). This document is the contract; later code must not invent extra weights without a spec change.
+Milestone 7 implements this table in Domain scoring. This document is the
+contract; later code must not invent extra weights without a spec change.

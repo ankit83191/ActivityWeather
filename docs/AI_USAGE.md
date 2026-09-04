@@ -158,3 +158,29 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - Treating unexpected units as `missingCriticalData`.
 - Locale-sensitive comma decimals.
 - Using geocoding timezone or `utc_offset_seconds` to interpret `daily.time`.
+
+## Milestone 7
+
+**Accepted after review and tests:**
+
+- `ActivityScoring` stays a single-day substitution boundary; ranking is a
+  protocol extension, not a required method or a second service.
+- `SuitabilityScore(clamping:)` instead of `try!` after rounding.
+- Polar night: `daylightDuration == 0` → sunshine ratio `0`.
+- Reason policy: affected rules only, deduped, veto/cap first, `|contribution|`
+  then `rawValue`; outdoor veto skips additives; indoor cap after additives;
+  combined veto priority thunderstorm → freezing rain → extreme gust.
+- Threshold matrix (below / at / above) plus ranking tests (seven days, one
+  activity, score desc / date asc, no mutation).
+
+**Rejected / materially corrected:**
+
+- Rejected requiring every conformer to implement weekly ranking.
+- Rejected `ActivityRanking` / a separate ranking service in this milestone.
+- Rejected `try!` / `preconditionFailure` for clamped scores.
+- Rejected dividing sunshine by daylight when daylight is zero.
+- Rejected emitting reasons for zero-contribution rules, and rejected listing
+  worked-example reasons in table-row order when `rawValue` tie-break differs.
+- Rejected applying the outdoor veto to indoor scoring.
+- Rejected emitting `dangerousTravelCap` when raw was already `≤ 40`.
+- No UI, DTO, networking, or repository edits in this milestone.

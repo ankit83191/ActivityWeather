@@ -299,3 +299,44 @@ Thirteen test-bundle JSON files remain. Each is a different wire-format case (mi
   0 failures; UI target **0** tests.
 - Warning: AppIntents metadata extraction skipped (no AppIntents dependency).
 - No live-network requests.
+
+## 2026-09-04 — Milestone 7: explainable suitability scoring
+
+Pure Domain engine from `docs/SCORING.md`. No UI, networking, DTO, or
+repository changes.
+
+### What shipped
+
+- `SuitabilityScoringEngine` conforming to `ActivityScoring`
+- `ScoringSpecification` named weights/thresholds
+- `SuitabilityScore.init(clamping:)` (validating `init(_:)` still throws)
+- Default `rankedSuitability(for:activity:)` on `ActivityScoring`
+- Worked-example, combination, polar-night, reason-order, threshold-matrix,
+  and ranking tests
+
+### TDD evidence (actual)
+
+1. Compiling stub engine (constant score `0`, empty reasons).
+2. **Assertion-red** (not a missing-type compile failure):
+   `testSkiWorkedExampleScores77` —
+   `XCTAssertEqual failed: ("0") is not equal to ("77")`;
+   reasons `[]` vs expected snowfall/snow-weather/freeze reasons.
+   Simulator iPhone 16e (`818F8DBA-D98B-4B09-8634-57008C4C2AEB`),
+   `xcodebuild test` exit **65**.
+3. Engine implementation. Score **77** then matched; a follow-up assertion
+   compared reason order to the worked-example table order
+   (`snowfallAmount`, `snowWeather`, `freezeMax`) and failed because equal
+   contributions sort by `rawValue` (`snowWeather` first). The test was
+   aligned to the approved ordering; that failure was not reconstructed.
+
+### Not in this milestone
+
+UI, ViewModels, networking, DTOs, repositories, composition root.
+
+### Verification (2026-09-04)
+
+- Simulator: iPhone 16e, iOS 26.2, id `818F8DBA-D98B-4B09-8634-57008C4C2AEB`
+- App `xcodebuild` **BUILD SUCCEEDED** (exit 0), `-derivedDataPath .derivedData`
+- Full `xcodebuild test` **TEST SUCCEEDED** (exit 0): **98** unit tests,
+  0 failures; UI target **0** tests
+- Warning: AppIntents metadata extraction skipped (no AppIntents dependency)

@@ -8,6 +8,10 @@ struct SuitabilityScore: Equatable, Hashable, Comparable, Sendable {
         self.value = value
     }
 
+    init(clamping value: Int) {
+        self.value = min(max(value, 0), 100)
+    }
+
     var level: SuitabilityLevel {
         switch value {
         case 0...24: .poor

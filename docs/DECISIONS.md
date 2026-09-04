@@ -257,3 +257,31 @@ empty string.
 **Consequences:** Scoring (milestone 7) receives only structurally complete
 weeks. Presentation maps `ForecastMappingError` later; it is not user-facing
 copy.
+
+## ADR-018: Single-day scoring protocol and explainable ranking
+
+**Context:** Milestone 7 implements `docs/SCORING.md` as a pure Domain engine.
+Tests need a small substitution boundary. Ranking seven days is mechanical
+once daily scores exist. `SuitabilityScore`’s validating initializer throws,
+so production rounding must not use `try!`. Polar night allows
+`daylight_duration == 0`.
+
+**Decision:**
+
+- `ActivityScoring` requires only `suitability(for:activity:)`. Weekly ranking
+  is a default protocol extension `rankedSuitability(for:activity:)`: score
+  descending, then `CivilDate` ascending. No `ActivityRanking` type and no
+  separate ranking service.
+- `SuitabilityScore.init(_:)` still throws outside `0...100`.
+  `SuitabilityScore.init(clamping:)` is the non-throwing factory used by the
+  engine after rounding.
+- `daylightDuration == 0` → sunshine ratio `0` (no divide-by-zero / `NaN`).
+- Reasons: only rules that changed the score; deduplicated; veto/cap first;
+  then absolute contribution descending; ties by `SuitabilityReason.rawValue`.
+  Outdoor veto skips additives. Indoor never uses the outdoor veto; the
+  indoor cap applies after additives and emits `dangerousTravelCap` only when
+  raw exceeds 40. Combined outdoor vetoes use thunderstorm → freezing rain →
+  extreme gust. UI later still shows raw weather values.
+
+**Consequences:** Test doubles implement one method. Ranking behaviour has one
+canonical implementation. Weights stay in `docs/SCORING.md`.

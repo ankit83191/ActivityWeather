@@ -4,5 +4,6 @@ enum DomainError: Error, Equatable, Sendable {
     case invalidCivilDate
     case invalidForecastTimezone
     case invalidForecastWindow
+    case invalidForecastValues
     case missingCriticalData
 }

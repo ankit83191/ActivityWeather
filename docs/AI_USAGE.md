@@ -76,3 +76,11 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
   Gregorian `CivilDate` avoids UTC-midnight ambiguity.
 - No generated scoring implementation, DTOs, networking, UI, or speculative
   `ActivityRanking` type.
+
+**Review corrections (still Milestone 3):**
+
+- Accepted splitting Domain tests into mirrored `Domain/Models` files.
+- Accepted `DailyForecast` numeric sanitization (`invalidForecastValues`)
+  without climate-range temperature/wind limits.
+- Accepted deriving `DailyActivitySuitability.date` from the scored
+  `DailyForecast` so a result cannot point at a different day.

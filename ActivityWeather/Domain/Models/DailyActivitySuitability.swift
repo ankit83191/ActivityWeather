@@ -4,6 +4,18 @@ struct DailyActivitySuitability: Equatable, Sendable {
     let score: SuitabilityScore
     let reasons: [SuitabilityReason]
 
+    init(
+        day: DailyForecast,
+        activity: Activity,
+        score: SuitabilityScore,
+        reasons: [SuitabilityReason]
+    ) {
+        self.date = day.date
+        self.activity = activity
+        self.score = score
+        self.reasons = reasons
+    }
+
     var level: SuitabilityLevel {
         score.level
     }

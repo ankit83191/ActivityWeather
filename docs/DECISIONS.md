@@ -121,9 +121,13 @@ window that crosses a daylight-saving transition.
 **Decision:**
 
 - `DailyForecast` contains every v1 scoring input as a non-optional value.
-  Data mapping must reject missing, null, non-aligned payload values before a
-  `DailyForecast` reaches Domain. The repository reports
-  `DomainError.missingCriticalData`; it does not manufacture a zero score.
+  Construction rejects non-finite numbers; negative precipitation, rain, snow,
+  wind, gusts, UV and durations; precipitation hours outside `0...24`; and
+  sunshine longer than daylight (`DomainError.invalidForecastValues`). It does
+  **not** impose subjective real-world temperature or wind climate limits.
+  Data mapping must still reject missing, null, non-aligned payload values
+  before a `DailyForecast` reaches Domain (`DomainError.missingCriticalData`).
+  Neither path manufactures a zero score.
 - `CivilDate` is a validated Gregorian year/month/day value. It is
   `Comparable` by those components and models the Forecast API's daily `time`
   value without converting local midnight to a UTC instant.
@@ -135,8 +139,12 @@ window that crosses a daylight-saving transition.
   [SCORING.md](SCORING.md). It cannot be supplied independently.
 - `Activity.allCases` is stable display order only. The product ranks days
   within one activity; it does not rank activities against one another.
+- `DailyActivitySuitability` is one activity on one civil date. Its `date` is
+  taken from the scored `DailyForecast`, and `SuitabilityLevel` is derived from
+  `SuitabilityScore`. `ActivityRanking` remains a later use-case type.
 - Domain values and repository/scoring protocols crossing async boundaries
-  conform to `Sendable`.
+  conform to `Sendable`. `ActivityScoring` is a synchronous substitution
+  boundary with no implementation in this milestone.
 
 **Consequences:** Partial API payloads cannot masquerade as valid forecasts.
 Data mapping has responsibility for structural validation. `WeeklyForecast`

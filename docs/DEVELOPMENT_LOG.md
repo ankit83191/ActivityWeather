@@ -129,3 +129,26 @@ Focused Red → Green cycles were run against the discovered iPhone 17 simulator
   expected until milestone 11.
 - Warning: AppIntents metadata extraction skipped because the app has no
   AppIntents dependency (unchanged from earlier milestones).
+
+### Review corrections (before follow-up commit)
+
+- Split Domain tests into `ActivityWeatherTests/Domain/Models/` focused files;
+  removed the miscellaneous `ActivityWeatherTests.swift`.
+- Dedicated `SuitabilityLevelTests` for inclusive bands 0/24, 25/49, 50/74,
+  75/100.
+- `DailyForecast` now throws `invalidForecastValues` for non-finite numbers,
+  negative amounts/durations/wind/UV, precipitation hours outside `0...24`,
+  and sunshine longer than daylight. No climate-range temperature/wind caps.
+  Red: `XCTAssertThrowsError failed: did not throw an error` (13 failures).
+- `DailyActivitySuitability` is one activity on one date; `date` is copied from
+  the scored `DailyForecast`. Level remains derived from `SuitabilityScore`.
+- `ActivityRanking` is still deferred. `ActivityScoring` is synchronous and has
+  no implementation.
+
+### Verification after review corrections (2026-09-04)
+
+- Simulator rediscovered: iPhone 16e, iOS 26.2,
+  id `818F8DBA-D98B-4B09-8634-57008C4C2AEB`.
+- `xcodebuild` **BUILD SUCCEEDED** (exit 0).
+- Full `xcodebuild test` **TEST SUCCEEDED** (exit 0): **20** unit tests,
+  0 failures; UI target 0 tests.

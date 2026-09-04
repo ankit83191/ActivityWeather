@@ -345,3 +345,43 @@ it as a genuine empty result would be misleading.
 **Consequences:** Feature files stay flat under `Features/LocationSearch`.
 A presentation subfolder can be introduced if the feature grows enough to
 need one; it adds no value at this scale. Forecast navigation is Milestone 10.
+
+## ADR-021: Ranked forecast presentation and preserved search navigation
+
+**Context:** A selected location needs one explainable, activity-specific
+ranking without refetching when the activity changes. Ranked scores and raw
+weather are separate Domain values, and a civil date must not shift when the
+device and forecast timezones differ.
+
+**Decision:**
+
+- One `NavigationStack` remains around location search. Search presentation
+  owns the optional navigation `Location`, calls `select(_:)` before
+  navigation, and uses a generic `@ViewBuilder` destination. The app root
+  captures only `GetActivityForecastUseCase` when constructing a destination
+  ViewModel.
+- `ActivityForecastView` owns its externally constructed
+  `@Observable ActivityForecastViewModel` with `@State`. Idle starts once;
+  loading/loaded ignore repeated loads; only failure retries. Cancellation
+  returns loading to idle. Task cancellation plus request generation ignores
+  obsolete success and failure without retaining the ViewModel through its
+  task.
+- Activity switching selects an existing `ActivityDayRanking`. Presentation
+  never scores or sorts, and Domain order remains authoritative.
+- Ranked suitability and weather join by `CivilDate`. A missing association
+  returns no rows and renders a safe unavailable state rather than indexing
+  or force-unwrapping.
+- Civil dates are constructed at local midday with a Gregorian calendar and
+  formatted with the same Forecast API IANA timezone and the user's locale.
+- A two-by-two activity selector avoids four truncated full names while
+  retaining full accessibility labels. Cards always show positional rank,
+  local date, numeric score, named level, metric weather facts, and
+  presentation-mapped reason copy.
+- Heuristic limitations remain visible on the ranking screen; the explanation
+  sheet includes score bands, venue availability, scientific-validation, and
+  surfing-proxy limitations.
+
+**Consequences:** Back navigation preserves the search ViewModel, query,
+results, and selected row. Presentation has exhaustive reason copy but no
+scoring thresholds or Data dependencies. Feature-local presentation helpers
+can move into a subfolder if this feature grows.

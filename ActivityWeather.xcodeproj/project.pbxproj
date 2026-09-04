@@ -44,6 +44,11 @@
 		G91E0C02B2C14F0A9D3E5F10 /* SearchSleeping.swift in Sources */ = {isa = PBXBuildFile; fileRef = H91E0C02B2C14F0A9D3E5F10 /* SearchSleeping.swift */; };
 		G91E0C03B2C14F0A9D3E5F10 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = H91E0C03B2C14F0A9D3E5F10 /* LocationSearchView.swift */; };
 		G91E0C11B2C14F0A9D3E5F10 /* LocationSearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = H91E0C11B2C14F0A9D3E5F10 /* LocationSearchViewModelTests.swift */; };
+		GA1E0C01B2C14F0A9D3E5F10 /* ActivityForecastViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = HA1E0C01B2C14F0A9D3E5F10 /* ActivityForecastViewModel.swift */; };
+		GA1E0C02B2C14F0A9D3E5F10 /* ActivityForecastPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = HA1E0C02B2C14F0A9D3E5F10 /* ActivityForecastPresentation.swift */; };
+		GA1E0C03B2C14F0A9D3E5F10 /* ActivityForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = HA1E0C03B2C14F0A9D3E5F10 /* ActivityForecastView.swift */; };
+		GA1E0C11B2C14F0A9D3E5F10 /* ActivityForecastViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = HA1E0C11B2C14F0A9D3E5F10 /* ActivityForecastViewModelTests.swift */; };
+		GA1E0C12B2C14F0A9D3E5F10 /* ActivityForecastPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = HA1E0C12B2C14F0A9D3E5F10 /* ActivityForecastPresentationTests.swift */; };
 		G41F0C11B2C14F0A9D3E5F10 /* SuitabilityScoringEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = H41F0C11B2C14F0A9D3E5F10 /* SuitabilityScoringEngineTests.swift */; };
 		G41F0C12B2C14F0A9D3E5F10 /* ScoringFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = H41F0C12B2C14F0A9D3E5F10 /* ScoringFixture.swift */; };
 		G41F0C13B2C14F0A9D3E5F10 /* ScoringThresholdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = H41F0C13B2C14F0A9D3E5F10 /* ScoringThresholdTests.swift */; };
@@ -157,6 +162,11 @@
 		H91E0C02B2C14F0A9D3E5F10 /* SearchSleeping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSleeping.swift; sourceTree = "<group>"; };
 		H91E0C03B2C14F0A9D3E5F10 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
 		H91E0C11B2C14F0A9D3E5F10 /* LocationSearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewModelTests.swift; sourceTree = "<group>"; };
+		HA1E0C01B2C14F0A9D3E5F10 /* ActivityForecastViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityForecastViewModel.swift; sourceTree = "<group>"; };
+		HA1E0C02B2C14F0A9D3E5F10 /* ActivityForecastPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityForecastPresentation.swift; sourceTree = "<group>"; };
+		HA1E0C03B2C14F0A9D3E5F10 /* ActivityForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityForecastView.swift; sourceTree = "<group>"; };
+		HA1E0C11B2C14F0A9D3E5F10 /* ActivityForecastViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityForecastViewModelTests.swift; sourceTree = "<group>"; };
+		HA1E0C12B2C14F0A9D3E5F10 /* ActivityForecastPresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityForecastPresentationTests.swift; sourceTree = "<group>"; };
 		H41F0C11B2C14F0A9D3E5F10 /* SuitabilityScoringEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuitabilityScoringEngineTests.swift; sourceTree = "<group>"; };
 		H41F0C12B2C14F0A9D3E5F10 /* ScoringFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringFixture.swift; sourceTree = "<group>"; };
 		H41F0C13B2C14F0A9D3E5F10 /* ScoringThresholdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringThresholdTests.swift; sourceTree = "<group>"; };
@@ -391,6 +401,7 @@
 			isa = PBXGroup;
 			children = (
 				H91E0C21B2C14F0A9D3E5F10 /* LocationSearch */,
+				HA1E0C20B2C14F0A9D3E5F10 /* ActivityForecast */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -403,6 +414,16 @@
 				H91E0C03B2C14F0A9D3E5F10 /* LocationSearchView.swift */,
 			);
 			path = LocationSearch;
+			sourceTree = "<group>";
+		};
+		HA1E0C20B2C14F0A9D3E5F10 /* ActivityForecast */ = {
+			isa = PBXGroup;
+			children = (
+				HA1E0C01B2C14F0A9D3E5F10 /* ActivityForecastViewModel.swift */,
+				HA1E0C02B2C14F0A9D3E5F10 /* ActivityForecastPresentation.swift */,
+				HA1E0C03B2C14F0A9D3E5F10 /* ActivityForecastView.swift */,
+			);
+			path = ActivityForecast;
 			sourceTree = "<group>";
 		};
 		02684CD9C58E4004BB04FBD7 /* Resources */ = {
@@ -436,6 +457,7 @@
 			isa = PBXGroup;
 			children = (
 				H91E0C31B2C14F0A9D3E5F10 /* LocationSearch */,
+				HA1E0C30B2C14F0A9D3E5F10 /* ActivityForecast */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -446,6 +468,15 @@
 				H91E0C11B2C14F0A9D3E5F10 /* LocationSearchViewModelTests.swift */,
 			);
 			path = LocationSearch;
+			sourceTree = "<group>";
+		};
+		HA1E0C30B2C14F0A9D3E5F10 /* ActivityForecast */ = {
+			isa = PBXGroup;
+			children = (
+				HA1E0C11B2C14F0A9D3E5F10 /* ActivityForecastViewModelTests.swift */,
+				HA1E0C12B2C14F0A9D3E5F10 /* ActivityForecastPresentationTests.swift */,
+			);
+			path = ActivityForecast;
 			sourceTree = "<group>";
 		};
 		145300566A174CFFB208B4BE /* Data */ = {
@@ -758,6 +789,9 @@
 				G91E0C01B2C14F0A9D3E5F10 /* LocationSearchViewModel.swift in Sources */,
 				G91E0C02B2C14F0A9D3E5F10 /* SearchSleeping.swift in Sources */,
 				G91E0C03B2C14F0A9D3E5F10 /* LocationSearchView.swift in Sources */,
+				GA1E0C01B2C14F0A9D3E5F10 /* ActivityForecastViewModel.swift in Sources */,
+				GA1E0C02B2C14F0A9D3E5F10 /* ActivityForecastPresentation.swift in Sources */,
+				GA1E0C03B2C14F0A9D3E5F10 /* ActivityForecastView.swift in Sources */,
 				A635CFFD5E5D4ED2B53E98A8 /* APIError.swift in Sources */,
 				5BDD81BFF66D4A879EBBD1D3 /* APIEndpoint.swift in Sources */,
 				DA16C32E8BA74F05A740551E /* APIClient.swift in Sources */,
@@ -791,6 +825,8 @@
 				G81E0C12B2C14F0A9D3E5F10 /* GetActivityForecastUseCaseTests.swift in Sources */,
 				G81E0C13B2C14F0A9D3E5F10 /* AppDependenciesTests.swift in Sources */,
 				G91E0C11B2C14F0A9D3E5F10 /* LocationSearchViewModelTests.swift in Sources */,
+				GA1E0C11B2C14F0A9D3E5F10 /* ActivityForecastViewModelTests.swift in Sources */,
+				GA1E0C12B2C14F0A9D3E5F10 /* ActivityForecastPresentationTests.swift in Sources */,
 				092AC8C1076443AE9B2AA52A /* SuitabilityLevelTests.swift in Sources */,
 				0EB3BEBE98DA4EE081CA49F7 /* DailyForecastTests.swift in Sources */,
 				89F8B02231FD4AD8AFB30779 /* WeeklyForecastTests.swift in Sources */,

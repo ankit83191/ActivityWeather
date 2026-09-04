@@ -1,7 +1,17 @@
 import SwiftUI
 
-struct LocationSearchView: View {
+struct LocationSearchView<ForecastDestination: View>: View {
     let viewModel: LocationSearchViewModel
+    @State private var navigationLocation: Location?
+    private let forecastDestination: (Location) -> ForecastDestination
+
+    init(
+        viewModel: LocationSearchViewModel,
+        @ViewBuilder forecastDestination: @escaping (Location) -> ForecastDestination
+    ) {
+        self.viewModel = viewModel
+        self.forecastDestination = forecastDestination
+    }
 
     var body: some View {
         NavigationStack {
@@ -10,6 +20,9 @@ struct LocationSearchView: View {
                 content
             }
             .navigationTitle("Find a location")
+            .navigationDestination(item: $navigationLocation) { location in
+                forecastDestination(location)
+            }
         }
     }
 
@@ -62,6 +75,7 @@ struct LocationSearchView: View {
 
         return Button {
             viewModel.select(location)
+            navigationLocation = location
         } label: {
             HStack(alignment: .firstTextBaseline, spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {

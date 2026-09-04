@@ -439,3 +439,75 @@ environment injection, UI tests, live-network tests.
   0 failures; UI target **0** tests; no skipped tests
 - Warning: AppIntents metadata extraction skipped (no AppIntents dependency)
 - No live-network requests
+
+## 2026-09-04 — Milestone 10: ranked activity forecast experience
+
+Selected-location forecast loading, one-at-a-time activity ranking,
+explainable weather cards, scoring limitations, and navigation that preserves
+the search feature.
+
+### What shipped
+
+- `@MainActor @Observable ActivityForecastViewModel` with privately mutable
+  idle/loading/loaded/failure state, single-load/retry rules, cancellation,
+  stale-completion protection, and activity selection
+- Presentation-only `CivilDate` weather association, locale-aware forecast-
+  timezone date formatting, exhaustive reason copy, and relevant metric facts
+- Adaptive two-by-two activity selector, best-day summary, seven positional
+  ranking cards, safe inconsistent-data state, visible surfing disclaimer,
+  and scoring explanation sheet
+- Search-owned `NavigationStack` with a generic destination builder; the
+  existing search ViewModel remains alive on back navigation
+- App-root destination composition that captures only
+  `GetActivityForecastUseCase`
+
+### TDD evidence (actual)
+
+With a compiling minimum ViewModel shell whose `load()` was empty,
+`testInitialLoadStartsExactlyOneRequest` failed because the repository
+received `[]` instead of the selected location and status remained `idle`
+instead of `loading`. The focused `xcodebuild test` exited **65**.
+
+The loading state machine then made the focused test green. Subsequent tests
+covered repeated loading/success calls, four seven-day rankings, default and
+persistent activity selection, activity switching without refetch/rescoring,
+Domain order including equal scores, failure/retry, cancellation/reload,
+stale success/failure, safe date association, and forecast-timezone formatting
+around a DST boundary.
+
+### Manual end-to-end validation
+
+On iPhone 16e (the smallest available iPhone Simulator), iOS 26.2:
+
+- Launched the final installed build, searched the live API for Paris, chose
+  the explicit Île-de-France result, and loaded its forecast.
+- Switched through skiing, surfing, outdoor, and indoor. For each activity,
+  scrolled through and confirmed positional rows 1 through 7.
+- Confirmed best-day summaries, numeric scores, Poor/Fair/Good/Great text,
+  metric facts, human-readable reasons, and the visible surfing-proxy
+  limitation.
+- Opened and dismissed the explanation sheet; confirmed score bands,
+  rule-based/not-scientifically-validated wording, venue limitation, and
+  surfing limitation.
+- Navigated back and confirmed `Paris`, its results, and the selected result
+  remained. Selected Paris, Texas and observed a fresh forecast with a
+  different local first date.
+- Checked light and dark appearances and Accessibility Large Dynamic Type.
+  The two-by-two selector remained usable and text reflowed without a blank
+  screen or crash.
+- The final app process had no serious runtime console errors. Expected
+  Simulator-only haptic-library messages were ignored.
+
+The live check also exposed an existing out-of-scope limitation:
+`Asia/Kolkata` is rejected by the current Domain IANA identifier validation.
+The successful required flow used `Europe/Paris`; no Domain or Data behaviour
+was changed.
+
+### Verification (2026-09-04)
+
+- App `xcodebuild` **BUILD SUCCEEDED** (exit 0), `-derivedDataPath .derivedData`
+- Full `xcodebuild test` **TEST SUCCEEDED** (exit 0): **135** unit tests,
+  0 failures; UI target **0** tests
+- Focused Milestone 10 suite: **14** tests, 0 failures
+- Warning: AppIntents metadata extraction skipped (no AppIntents dependency)
+- No Domain, Data, repository, use-case, or scoring changes

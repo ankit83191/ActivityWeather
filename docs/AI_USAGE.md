@@ -231,3 +231,39 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - Rejected navigation callbacks/destinations before the forecast experience.
 - Rejected a redundant Presentation folder and DesignSystem abstraction.
 - No forecast UI, Data, scoring, or UI-test changes.
+
+## Milestone 10
+
+**Accepted after review and tests:**
+
+- Search-owned `NavigationStack` and optional Domain `Location`; generic
+  destination builder captures only the forecast use case.
+- `@State` ownership of an externally constructed `@Observable` forecast
+  ViewModel with explicit idle/loading/loaded/failure transitions.
+- Weak task capture, cancellation-to-idle, and generation-based stale
+  completion protection.
+- Existing Domain ranking selection only: no presentation scoring, sorting,
+  threshold interpretation, or activity-switch refetch.
+- `CivilDate` lookup for weather association and a safe unavailable state for
+  inconsistent data.
+- Gregorian, forecast-timezone local-midday date construction plus
+  locale-aware formatting, tested around DST with a device/forecast timezone
+  mismatch.
+- Exhaustive user-facing reason copy, metric facts, textual ranks/scores/
+  levels, adaptive two-by-two activity selection, visible limitations, and a
+  complete explanation sheet.
+
+**Rejected / materially changed:**
+
+- Rejected `AnyView`, navigation in Domain, passing `AppDependencies` into a
+  destination, and replacing the search root.
+- Rejected array-index joins, force unwraps, formatted-string ordering, and
+  displaying `SuitabilityReason.rawValue`.
+- Rejected a four-item segmented control after accounting for full activity
+  names and accessibility sizes; used a two-by-two selector with full
+  accessibility labels.
+- Rejected four scores in every chronological card; one selected ranking is
+  the primary presentation.
+- No Domain, Data, repository, use-case, or scoring changes. A live
+  `Asia/Kolkata` alias rejection was observed in the existing timezone
+  invariant and intentionally left outside this milestone.

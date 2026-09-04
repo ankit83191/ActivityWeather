@@ -151,3 +151,38 @@ Data mapping has responsibility for structural validation. `WeeklyForecast`
 imports Foundation only to validate `TimeZone`; the remaining Domain values use
 the Swift standard library. Later use cases sort `[DailyActivitySuitability]`
 by score descending, then `CivilDate` ascending.
+
+## ADR-015: Typed HTTPS client without pinning, retries, or caching
+
+**Context:** Milestone 4 needs a replaceable HTTP JSON client for later Open-Meteo
+calls. The APIs are public, unauthenticated HTTPS JSON. Alternatives considered
+included `URLSession.shared` as a hard-coded dependency, a retained shared
+`JSONDecoder`, live-network tests, and certificate pinning.
+
+**Decision:**
+
+- Represent requests as an immutable `Sendable` `APIEndpoint` that builds URLs
+  only through `URLComponents` and `URLQueryItem`.
+- Inject `URLSession` into `URLSessionAPIClient`. Tests install a
+  `URLProtocol` on an ephemeral configuration; production composition can pass
+  any session. `URLSession.shared` is not an unreplaceable dependency.
+- Create a new `JSONDecoder()` per request so concurrent `execute` calls do not
+  share a mutable decoder.
+- Treat only HTTP status `200...299` as success. Reject a non-`HTTPURLResponse`
+  before decoding. Map other `URLError` values to `APIError.transport` while
+  rethrowing `CancellationError` and `URLError.cancelled` unchanged.
+- `APIError` carries HTTP status or the typed `URLError`. It does not store
+  response bodies. `decoding` has no associated payload so decoder internals
+  are not presented as user-facing context.
+- App Transport Security plus HTTPS is appropriate for this exercise: Open-Meteo
+  is a public HTTPS API with no client credentials in transit. ATS already
+  blocks accidental cleartext. Certificate pinning is not used: there is no
+  demonstrated threat model that requires pinning, and pinning would fail
+  clients whenever the remote certificate rotates until an app update ships a
+  new pin.
+
+**Consequences:** Milestone 5 can add Open-Meteo endpoints and DTOs on top of
+this client. Retries, caching, reachability, logging frameworks,
+authentication, and generic POST/upload are out of scope until a later
+requirement exists. `URLSessionAPIClient` is `@unchecked Sendable` because
+`URLSession` is thread-safe for data tasks but is not `Sendable` in the SDK.

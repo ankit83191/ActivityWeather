@@ -152,3 +152,61 @@ Focused Red → Green cycles were run against the discovered iPhone 17 simulator
 - `xcodebuild` **BUILD SUCCEEDED** (exit 0).
 - Full `xcodebuild test` **TEST SUCCEEDED** (exit 0): **20** unit tests,
   0 failures; UI target 0 tests.
+
+## 2026-09-04 — Milestone 4: typed networking foundation
+
+HTTP JSON client only. No Open-Meteo endpoints, DTOs, mappers, repositories, or
+geocoding.
+
+### What shipped
+
+- `ActivityWeather/Data/Networking/`: `APIEndpoint`, `APIClient`, `APIError`,
+  `URLSessionAPIClient`
+- Tests under `ActivityWeatherTests/Data/Networking/` with a lock-protected
+  test `URLProtocol` (host-keyed handlers, reset in teardown)
+- ADR-015: ATS + HTTPS without certificate pinning
+
+### TDD evidence
+
+Simulator: iPhone 16e, iOS 26.2, id `818F8DBA-D98B-4B09-8634-57008C4C2AEB`.
+
+1. **Valid endpoint URL construction**
+   - Red (exit 65): `cannot find 'APIEndpoint' in scope` (`APIEndpointTests`).
+   - Green (exit 0): 2 tests, 0 failures (URL construction + encoding together
+     once the type compiled).
+2. **Spaces and reserved query-character encoding**
+   - Covered in the same `APIEndpointTests` green run. Query values are
+     asserted via `URLComponents.queryItems` by name, not query-string order.
+     The serialized URL still contains percent-encoding (`Los%20Angeles`,
+     `a%26b%3Dc`).
+3–10. **`URLSessionAPIClient` behaviour** (injected `URLProtocol`, no live
+   network, no sleeps):
+   - Compile red (exit 65): Swift 6 rejected nonisolated mutable handler
+     storage on `StubURLProtocol`.
+   - Compile red (exit 65): `Task { execute }` captured XCTest `self`
+     (`sending` / data-race diagnostic).
+   - Behavioural red (exit 65): `testMapsTransportFailure` —
+     `XCTAssertEqual` of full `URLError` values failed because URLSession
+     attached extra `userInfo` (`NSURLErrorDomain` `-1009`). Assertion was
+     narrowed to the typed `URLError.Code`.
+   - Green (exit 0): 8 tests, 0 failures (HTTP 200, HTTP 201, non-2xx,
+     non-HTTP `URLResponse`, transport mapping, malformed JSON →
+     `APIError.decoding`, `URLError.cancelled` passthrough, task
+     cancellation passthrough).
+
+### Boundaries kept
+
+- Injected `URLSession`; new `JSONDecoder()` per request.
+- Success only for HTTP `200...299`; status validated before decode.
+- No retries, cache, reachability, logging framework, pinning, auth, or POST
+  helpers.
+- No Open-Meteo types.
+
+### Verification (2026-09-04)
+
+- Simulator: iPhone 16e, iOS 26.2, id `818F8DBA-D98B-4B09-8634-57008C4C2AEB`.
+- App `xcodebuild` **BUILD SUCCEEDED** (exit 0), `-derivedDataPath .derivedData`.
+- Full `xcodebuild test` **TEST SUCCEEDED** (exit 0): **30** unit tests,
+  0 failures; UI target **0** tests (unused until milestone 11).
+- Warning: AppIntents metadata extraction skipped (no AppIntents dependency).
+- No live-network requests in tests.

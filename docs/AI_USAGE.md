@@ -84,3 +84,27 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
   without climate-range temperature/wind limits.
 - Accepted deriving `DailyActivitySuitability.date` from the scored
   `DailyForecast` so a result cannot point at a different day.
+
+## Milestone 4
+
+**Accepted after tests and review:**
+
+- Immutable `Sendable` `APIEndpoint` via `URLComponents` / `URLQueryItem`.
+- `APIClient.execute` constrained to `Response: Decodable & Sendable`.
+- Injected `URLSession` and a fresh `JSONDecoder` per request.
+- HTTP `200...299` only; explicit `nonHTTPResponse`; decode after status.
+- `CancellationError` and `URLError.cancelled` are not `APIError.transport`.
+- Thread-safe, teardown-reset `URLProtocol` stubs keyed by host.
+- ATS + HTTPS without certificate pinning for this public unauthenticated API.
+
+**Rejected / not used:**
+
+- Open-Meteo endpoints, DTOs, mappers, repositories, geocoding (Milestone 5).
+- `URLSession.shared` as an unreplaceable dependency.
+- A process-wide shared `JSONDecoder`.
+- Live-network tests and arbitrary `sleep`.
+- Retries, exponential backoff, caching, reachability, logging frameworks,
+  certificate pinning, authentication, generic POST/upload.
+- Asserting query-item order in the serialized query string.
+- Equating wrapped `URLError` values by full `userInfo`; tests check the
+  typed `URLError.Code` after URLSession attaches session metadata.

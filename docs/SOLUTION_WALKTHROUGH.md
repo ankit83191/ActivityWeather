@@ -1,4 +1,4 @@
-# Interview walkthrough
+# Technical solution walkthrough
 
 ## 1. Problem framing
 

@@ -83,7 +83,7 @@ For behavioural milestones, record the failing test and the reason it failed in 
 - Ranked, explainable scores for the four activities.
 - Unit tests for scoring, mapping, repositories, use cases and ViewModels.
 - Accessibility and UI smoke coverage in milestone 11.
-- Public submission guide, screenshots, interview walkthrough, decisions,
+- Public submission guide, screenshots, technical solution walkthrough, decisions,
   development log, and AI usage kept current.
 
 ## MVP exclusions

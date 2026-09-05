@@ -327,7 +327,7 @@ AI is a **reviewed assistant**, not an authority. Generated suggestions are comp
 - Documentation/assets-only finalization after confirming the milestone 11
   commit and clean working tree.
 - Portable simulator discovery, explicit architecture/request flow, precise
-  limitations, provider licensing, and a focused interview walkthrough.
+  limitations, provider licensing, and a focused technical solution walkthrough.
 - Three screenshots captured from a live final-build journey using a temporary
   UI-driving test method; the method was fully removed before staging.
 - Staged-index export for clean-snapshot build/test verification.

@@ -459,5 +459,5 @@ verification.
   but historical commits are not claimed to have been rebuilt.
 
 **Consequences:** A fresh clone has portable run/test guidance and a concise
-interview narrative. Final executable claims apply to the staged snapshot;
+technical solution walkthrough. Final executable claims apply to the staged snapshot;
 remaining manual and physical-device limitations stay explicit.

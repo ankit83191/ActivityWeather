@@ -211,4 +211,4 @@ timezone terminology, and avoiding unsupported TDD claims.
 - [Architecture decisions](docs/DECISIONS.md)
 - [Development and verification log](docs/DEVELOPMENT_LOG.md)
 - [AI usage disclosure](docs/AI_USAGE.md)
-- [Interview walkthrough](docs/INTERVIEW_WALKTHROUGH.md)
+- [Technical solution walkthrough](docs/SOLUTION_WALKTHROUGH.md)

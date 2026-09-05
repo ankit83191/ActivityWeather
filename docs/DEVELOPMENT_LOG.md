@@ -660,7 +660,7 @@ reviewer audit without changing production or test behavior.
   screenshots, request flow, architecture, scoring, error/accessibility
   behavior, limitations, TDD accuracy, AI disclosure, attribution/licensing,
   future work, and a documentation index.
-- Added `docs/INTERVIEW_WALKTHROUGH.md` covering problem framing,
+- Added `docs/SOLUTION_WALKTHROUGH.md` covering problem framing,
   assumptions, dependency inversion, state/request flow, scoring, concurrency,
   testing, accessibility, trade-offs, scalability, AI verification, and future
   improvements.
